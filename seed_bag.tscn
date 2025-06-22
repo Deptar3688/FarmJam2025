@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://caylh56f3t1wt"]
+
+[ext_resource type="Script" path="res://seed_bag.gd" id="1_ikkxt"]
+[ext_resource type="Texture2D" uid="uid://byykcvc65bhk" path="res://Assets/UI/WheatSeeds.png" id="1_jrv4i"]
+[ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="2_tgj8y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0xjn"]
+size = Vector2(42, 42)
+
+[node name="SeedBag" type="Area2D"]
+script = ExtResource("1_ikkxt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("2_tgj8y")
+texture = ExtResource("1_jrv4i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_q0xjn")
