@@ -1,0 +1,48 @@
+class_name Selectable 
+extends Area2D
+
+@export var holding_icon : PackedScene
+@onready var sprite := $Sprite2D
+
+var is_currently_hovered := false
+var selected := false
+
+signal holding(object: PackedScene)
+signal stop_holding
+signal selected_self(selectable: Selectable)
+
+func _ready():
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
+	sprite.material.set_shader_parameter("thickness", 0)
+
+func _process(delta):
+	if is_currently_hovered and Input.is_action_just_pressed("click"):
+		if !selected:
+			selected = true
+			selected_self.emit(self)
+			holding.emit(holding_icon)
+		else:
+			selected = false
+			stop_holding.emit()
+	_update_visual()
+
+func _on_mouse_exited():
+	is_currently_hovered = false
+	
+func _on_mouse_entered():
+	is_currently_hovered = true
+	
+func _update_visual():
+	if is_currently_hovered or selected:
+		$Sprite2D.material.set_shader_parameter("thickness", 2)
+	else:
+		$Sprite2D.material.set_shader_parameter("thickness", 0)
+			
+
+func deselect():
+	selected = false
+	_update_visual()
+
+func _get_object():
+	return holding_icon

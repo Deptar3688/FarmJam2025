@@ -1,7 +1,7 @@
 extends Node
 
 # Reference to the tilemap
-@export var tilemap: TileMap
+@export var tilemap: TileMapLayer
 @export var crop_container: Node2D
 
 # Dictionary to track tile occupancy

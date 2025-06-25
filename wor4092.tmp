@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=22 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Script" path="res://grid_manager.gd" id="1_x44p1"]
@@ -15,7 +15,6 @@
 [ext_resource type="TileSet" uid="uid://dbqy11k5mp6o0" path="res://Selectables/Actions/placementmask.tres" id="7_crrr8"]
 [ext_resource type="PackedScene" uid="uid://caylh56f3t1wt" path="res://Selectables/Seeds/seed_bag.tscn" id="7_fdg62"]
 [ext_resource type="PackedScene" uid="uid://cbbv2urlky0vk" path="res://Selectables/Actions/hoe.tscn" id="11_v4f2c"]
-[ext_resource type="Script" path="res://grid_container.gd" id="13_smjfs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -188,7 +187,6 @@ offset_right = 52.0
 offset_bottom = 312.0
 grow_horizontal = 2
 columns = 3
-script = ExtResource("13_smjfs")
 
 [node name="Panel" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -228,8 +226,5 @@ position = Vector2(25, 24)
 
 [node name="HoldingContainer" type="Node2D" parent="UI"]
 
-[connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel/SeedBag" to="." method="_on_seed_bag_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel/SeedBag" to="." method="_on_seed_bag_stop_holding"]
-[connection signal="holding" from="UI/UI/GridContainer/Panel2/Hoe" to="." method="_on_hoe_holding"]
-[connection signal="stop_holding" from="UI/UI/GridContainer/Panel2/Hoe" to="." method="_on_hoe_stop_holding"]

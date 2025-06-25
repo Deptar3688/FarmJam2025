@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://caylh56f3t1wt"]
+[gd_scene load_steps=6 format=3 uid="uid://caylh56f3t1wt"]
 
-[ext_resource type="Script" path="res://seed_bag.gd" id="1_ikkxt"]
+[ext_resource type="Script" path="res://Selectables/selectable.gd" id="1_ikkxt"]
 [ext_resource type="Texture2D" uid="uid://byykcvc65bhk" path="res://Assets/UI/WheatSeeds.png" id="1_jrv4i"]
+[ext_resource type="PackedScene" uid="uid://c116q14pb1qgs" path="res://Crops/crop_wheat.tscn" id="2_151wo"]
 [ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="2_tgj8y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q0xjn"]
@@ -9,6 +10,7 @@ size = Vector2(42, 42)
 
 [node name="SeedBag" type="Area2D"]
 script = ExtResource("1_ikkxt")
+holding_icon = ExtResource("2_151wo")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("2_tgj8y")

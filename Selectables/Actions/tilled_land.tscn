@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://liegltq4j4bx"]
+
+[ext_resource type="Texture2D" uid="uid://cbi8tu1wm7oql" path="res://Assets/BG/TilledLand.png" id="1_5hd0k"]
+
+[node name="TilledLand" type="Node2D"]
+scale = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("1_5hd0k")

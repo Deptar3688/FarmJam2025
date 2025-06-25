@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c116q14pb1qgs"]
+
+[ext_resource type="Texture2D" uid="uid://cw65eusc8cppr" path="res://Assets/BG/crop_wheat.png" id="1_4w8aj"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_2do1r"]
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 16, 8, 0, 16, -16, 8)])
+
+[node name="CropWheat" type="Node2D"]
+scale = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("1_4w8aj")
+hframes = 4
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(0, -8)
+navigation_polygon = SubResource("NavigationPolygon_2do1r")
