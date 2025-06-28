@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://fslo1tql6o5"]
 
-[ext_resource type="Script" path="res://Crops/crop_grape.gd" id="1_2ww30"]
+[ext_resource type="Script" uid="uid://oqawrtie3t00" path="res://Crops/crop_grape.gd" id="1_2ww30"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_a1md5"]
 
 [node name="CropGrape" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]

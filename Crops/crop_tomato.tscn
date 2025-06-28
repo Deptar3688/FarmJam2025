@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://843eqv7glq06"]
 
-[ext_resource type="Script" path="res://Crops/crop_tomato.gd" id="1_u578h"]
+[ext_resource type="Script" uid="uid://cfs30uqojt2bw" path="res://Crops/crop_tomato.gd" id="1_u578h"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_oq01k"]
 
 [node name="CropTomato" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]

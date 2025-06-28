@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://4wnp803uohgm"]
 
-[ext_resource type="Script" path="res://isometric_pathfinding_enemy.gd" id="1_m6npb"]
+[ext_resource type="Script" uid="uid://bojfsmtsy7lk3" path="res://isometric_pathfinding_enemy.gd" id="1_m6npb"]
 [ext_resource type="Texture2D" uid="uid://c11ya3su8057h" path="res://Assets/Entities/SpellThief_template.png" id="2_bj0c7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_demgr"]

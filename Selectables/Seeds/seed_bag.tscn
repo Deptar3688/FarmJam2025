@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://caylh56f3t1wt"]
 
-[ext_resource type="Script" path="res://Selectables/selectable.gd" id="1_ikkxt"]
+[ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_ikkxt"]
 [ext_resource type="Texture2D" uid="uid://byykcvc65bhk" path="res://Assets/UI/WheatSeeds.png" id="1_jrv4i"]
 [ext_resource type="PackedScene" uid="uid://c116q14pb1qgs" path="res://Crops/crop_wheat.tscn" id="2_151wo"]
 [ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="2_tgj8y"]

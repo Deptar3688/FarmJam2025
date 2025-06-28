@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0744utgdt7py"]
 
-[ext_resource type="Script" path="res://Crops/crop_pumpkin.gd" id="1_guouh"]
+[ext_resource type="Script" uid="uid://dppgxggtm6a2k" path="res://Crops/crop_pumpkin.gd" id="1_guouh"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_jt7ut"]
 
 [node name="CropPumpkin" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]

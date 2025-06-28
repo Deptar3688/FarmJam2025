@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bo1invc5kkrom"]
 
-[ext_resource type="Script" path="res://Selectables/selectable.gd" id="1_hor3k"]
+[ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_hor3k"]
 [ext_resource type="PackedScene" uid="uid://843eqv7glq06" path="res://Crops/crop_tomato.tscn" id="2_5wu0n"]
 [ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="3_uh2qx"]
 [ext_resource type="Texture2D" uid="uid://gk0g3xd431t7" path="res://Assets/UI/Interactables-TomatoSeeds.png" id="4_axgv1"]

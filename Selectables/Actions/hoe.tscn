@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cbbv2urlky0vk"]
 
 [ext_resource type="Texture2D" uid="uid://cbqn3ppltl2ql" path="res://Assets/UI/Interactables-hoe.png" id="1_l1kx0"]
-[ext_resource type="Script" path="res://Selectables/selectable.gd" id="1_y024j"]
+[ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_y024j"]
 [ext_resource type="PackedScene" uid="uid://liegltq4j4bx" path="res://Selectables/Actions/tilled_land.tscn" id="2_8pyup"]
 [ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="2_fl1go"]
 

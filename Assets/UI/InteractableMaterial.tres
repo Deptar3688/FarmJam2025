@@ -1,16 +1,16 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://g7gd8uy0505q"]
 
-[ext_resource type="Shader" path="res://Assets/UI/Outline.gdshader" id="1_u58s4"]
+[ext_resource type="Shader" uid="uid://b8ddaw68v2w6q" path="res://Assets/UI/Outline.gdshader" id="1_u58s4"]
 
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_u58s4")
 shader_parameter/thickness = 1.0
 shader_parameter/ring_count = 16
-shader_parameter/ring_offset = null
+shader_parameter/ring_offset = 0.0
 shader_parameter/outline_color = Color(0.9, 0.9, 0.9, 1)
 shader_parameter/border_clipping_fix = true
 shader_parameter/aspect_ratio = 1.0
 shader_parameter/square_border = false
-shader_parameter/offset = null
+shader_parameter/offset = Vector2(0, 0)
 shader_parameter/max_or_add = false

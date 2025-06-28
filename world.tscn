@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=4 uid="uid://bcisigfbv31l8"]
 
-[ext_resource type="Script" path="res://world.gd" id="1_u1h3i"]
+[ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
 [ext_resource type="Texture2D" uid="uid://ccke3vwsd1uc6" path="res://Assets/UI/BG-Alternate.png" id="3_c7yqe"]
 [ext_resource type="Texture2D" uid="uid://c8tb7w8jxiqqp" path="res://Assets/UI/StatBar.png" id="4_31rca"]
@@ -15,7 +15,7 @@
 [ext_resource type="TileSet" uid="uid://dbqy11k5mp6o0" path="res://Selectables/Actions/placementmask.tres" id="7_crrr8"]
 [ext_resource type="PackedScene" uid="uid://dyq4hw7arsi48" path="res://Entities/tower.tscn" id="10_im0vs"]
 [ext_resource type="PackedScene" uid="uid://cbbv2urlky0vk" path="res://Selectables/Actions/hoe.tscn" id="11_v4f2c"]
-[ext_resource type="Script" path="res://grid_container.gd" id="13_smjfs"]
+[ext_resource type="Script" uid="uid://dthwgfd4hon7a" path="res://grid_container.gd" id="13_smjfs"]
 [ext_resource type="PackedScene" uid="uid://0hv6gw0dus4f" path="res://Selectables/Seeds/seed_wheat.tscn" id="16_sovf1"]
 [ext_resource type="PackedScene" uid="uid://d3jrdnedfjb5i" path="res://Selectables/Seeds/seed_grape.tscn" id="18_n5bmx"]
 [ext_resource type="PackedScene" uid="uid://bo1invc5kkrom" path="res://Selectables/Seeds/seed_tomato.tscn" id="19_01wst"]

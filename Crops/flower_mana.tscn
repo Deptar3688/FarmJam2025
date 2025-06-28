@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdrb815g5astb"]
+
+[ext_resource type="Script" uid="uid://6potks4ruvst" path="res://Crops/flower_mana.gd" id="1_qol6y"]
+[ext_resource type="Texture2D" uid="uid://284rfwfqduo5" path="res://Assets/BG/flowers.png" id="2_hviln"]
+
+[node name="FlowerMana" type="Area2D"]
+scale = Vector2(2, 2)
+script = ExtResource("1_qol6y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("2_hviln")
+hframes = 5
+vframes = 3
+frame = 5
+
+[node name="GrowingTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(16, 0, 0, -8, -16, 0, 0, 8)
+
+[connection signal="timeout" from="GrowingTimer" to="." method="_on_growing_timer_timeout"]

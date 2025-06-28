@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cqxwrjqw3rswj"]
 
 [ext_resource type="Texture2D" uid="uid://dsqqfnm1psbga" path="res://Assets/Entities/Fireball.png" id="1_abo60"]
-[ext_resource type="Script" path="res://Entities/fireball.gd" id="1_ophdl"]
+[ext_resource type="Script" uid="uid://cr7djcimuhake" path="res://Entities/fireball.gd" id="1_ophdl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_h1a1w"]
 radius = 3.0

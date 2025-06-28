@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dyq4hw7arsi48"]
 
 [ext_resource type="Texture2D" uid="uid://dgtf4bab1qafo" path="res://Assets/BG/TowerTile.png" id="1_dveof"]
-[ext_resource type="Script" path="res://Entities/tower.gd" id="1_yuigb"]
+[ext_resource type="Script" uid="uid://cv7e2tsmg38qq" path="res://Entities/tower.gd" id="1_yuigb"]
 
 [node name="Tower" type="Area2D"]
 script = ExtResource("1_yuigb")

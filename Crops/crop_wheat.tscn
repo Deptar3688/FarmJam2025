@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c116q14pb1qgs"]
 
-[ext_resource type="Script" path="res://Crops/crop_wheat.gd" id="1_en421"]
+[ext_resource type="Script" uid="uid://cxgg6wdabryce" path="res://Crops/crop_wheat.gd" id="1_en421"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_mxe7l"]
 
 [node name="CropWheat" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
