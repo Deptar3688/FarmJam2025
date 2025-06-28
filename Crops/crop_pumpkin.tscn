@@ -1,22 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://c116q14pb1qgs"]
+[gd_scene load_steps=3 format=3 uid="uid://b0744utgdt7py"]
 
-[ext_resource type="Script" path="res://Crops/crop_wheat.gd" id="1_en421"]
-[ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_mxe7l"]
+[ext_resource type="Script" path="res://Crops/crop_pumpkin.gd" id="1_guouh"]
+[ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_jt7ut"]
 
-[node name="CropWheat" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
+[node name="CropPumpkin" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
 scale = Vector2(2, 2)
-script = ExtResource("1_en421")
-crop_name = "wheat"
-num_stages = 4
+script = ExtResource("1_guouh")
+crop_name = "pumpkin"
+num_stages = 5
 sprite = NodePath("Sprite2D")
 growing_timer = NodePath("GrowingTimer")
-health = Array[int]([1, 3, 7, 15])
+health = Array[int]([1, 2, 3, 4, 10])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)
-texture = ExtResource("2_mxe7l")
+texture = ExtResource("2_jt7ut")
 hframes = 8
 vframes = 4
+frame = 8
 
 [node name="GrowingTimer" type="Timer" parent="."]
 one_shot = true

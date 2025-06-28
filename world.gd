@@ -1,22 +1,46 @@
 extends Node2D
 
+var gold : int
+
 @onready var tilemap := $TileMaps/Layer0
-@onready var tilemapplayer := $TileMaps/Layer1
+@onready var placement_mask_till := $TileMaps/PlacementMaskTill
+@onready var placement_mask_crops := $TileMaps/PlacementMaskCrops 
+@onready var placement_mask_current := $TileMaps/PlacementMaskCurrent
+
+# crops
 @onready var CropContainer := $TileMaps/CropContainer
 @onready var wheat_scene = preload("res://Crops/crop_wheat.tscn")
-@onready var placement_mask := $TileMaps/PlacementMask
+@onready var tilled_land_scene = preload("res://Selectables/Actions/tilled_land.tscn")
+
+# placement indicators
 @onready var HoldingContainer := $UI/HoldingContainer
 var holding : Node2D
 var held_tile : PackedScene
 
+# pathfinding
+@onready var entity_container := $EntityContainer
+var astar := AStarGrid2D.new()
+@onready var tower := $EntityContainer/Tower
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var TL_tile = Vector2i(-1,0)
-	var BL_tile = Vector2i(25,26)
-	var TR_tile = Vector2i(14,-15)
-	var TB_tile = Vector2i(39,10)
+	#var TL_tile = Vector2i(-1,0)
+	#var BL_tile = Vector2i(25,26)
+	#var TR_tile = Vector2i(14,-15)
+	#var TB_tile = Vector2i(39,10)
 	var center_tile = Vector2i(19,5)
-	tilemapplayer.set_cell(center_tile, 3, Vector2i(0,0))
+	
+	# AStarGrid2D
+	var map_size = Vector2i(41, 41)  # size of your grid
+	astar.region = Rect2i(Vector2i(-1, -15), map_size) # for diamond down
+	astar.cell_size = Vector2(32, 16)  # isometric tile size
+
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # disable diagonal movement
+	astar.update()
+	_update_walkable_tiles()
+	spawn_enemy_at(Vector2i(15,-5), tower)
+	spawn_enemy_at(Vector2i(31,12), tower)
+	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -24,20 +48,62 @@ func _process(delta):
 		holding.position = _mouse_to_tileset_position()
 		
 		if Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
-			var new_crop = held_tile.instantiate()
-			var tile_pos = _mouse_to_tileset_position()
-			new_crop.position = tile_pos
-			CropContainer.add_child(new_crop)
+			_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
 			print("invalid placement")
+	
+# Navigation
+func _update_walkable_tiles():
+	for x in astar.region.size.x:
+		for y in astar.region.size.y:
+			var tile_pos = Vector2i(x, y)
+			var tile_id = tilemap.get_cell_source_id(tile_pos)
+			
+			var walkable = true
+			# Block if it's a crop or unwalkable terrain
+			if tile_id in [3,5]:
+				walkable = false
+			
+			#print("(",x,",",y,"):",tile_id,walkable)
+			if astar.is_in_bounds(tile_pos.x, tile_pos.y):
+				astar.set_point_solid(tile_pos, !walkable)
+	
+	astar.update()
+
+func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
+	var enemy = preload("res://Entities/witch_enemy.tscn").instantiate()
+	enemy.position = tilemap.to_global(tilemap.map_to_local(tile_pos))
+	enemy.set_astar_data(astar, tilemap)
+	enemy.original_target = target
+	entity_container.add_child(enemy)
+	enemy.scale = Vector2i(2,2)
+
+
+func _place_tile():
+	var new_crop = held_tile.instantiate()
+	var tile_pos = _mouse_to_tileset_position()
+	new_crop.position = tile_pos
+	CropContainer.add_child(new_crop)
+	
+	# update placement mask
+	var mouse_pos = get_global_mouse_position()
+	var local_pos = placement_mask_current.to_local(mouse_pos)
+	var tile_coords = placement_mask_current.local_to_map(local_pos)
+	
+	if held_tile != tilled_land_scene:
+		new_crop._start_growing()
+		placement_mask_crops.set_cell(tile_coords, 1, Vector2i(0,1))
+	elif held_tile == tilled_land_scene:
+		placement_mask_till.set_cell(tile_coords, 1, Vector2i(0,1))
+		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 # checks PlacementMask to see if area is valid
 func is_tile_placeable(tile_pos: Vector2i):
 	var mouse_pos = get_global_mouse_position()
-	var local_pos = placement_mask.to_local(mouse_pos)
-	var tile_coords = placement_mask.local_to_map(local_pos)
-	var tile_id = placement_mask.get_cell_source_id(tile_coords)
-	print(tile_id)
+	var local_pos = placement_mask_current.to_local(mouse_pos)
+	var tile_coords = placement_mask_current.local_to_map(local_pos)
+	var tile_id = placement_mask_current.get_cell_source_id(tile_coords)
+	#print(tile_id)
 	return tile_id == 0 # true if valid
 
 
@@ -48,18 +114,26 @@ func _mouse_to_tileset_position():
 	var world_pos = tilemap.to_global(tilemap.map_to_local(tile_coords))  # snap to tile center
 	return world_pos
 
+#func _update_placement_mask():
+
+
 func _hold_object(object):
 	held_tile = object
 	holding = object.instantiate()
 	holding.position = _mouse_to_tileset_position()
 	HoldingContainer.add_child(holding)
-	placement_mask.visible = true
-
+	if held_tile != tilled_land_scene:
+		placement_mask_current = placement_mask_crops
+	else:
+		placement_mask_current = placement_mask_till
+		
+	placement_mask_current.visible = true
+	
 func _stop_holding():
 	held_tile = null
 	holding.queue_free()
 	holding = null
-	placement_mask.visible = false
+	placement_mask_current.visible = false
 
 func _switch_holding(object):
 	_stop_holding()

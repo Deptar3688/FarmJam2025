@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://4wnp803uohgm"]
+
+[ext_resource type="Script" path="res://isometric_pathfinding_enemy.gd" id="1_m6npb"]
+[ext_resource type="Texture2D" uid="uid://c11ya3su8057h" path="res://Assets/Entities/SpellThief_template.png" id="2_bj0c7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_demgr"]
+
+[node name="TestEnemy2" type="CharacterBody2D"]
+position = Vector2(704, 158)
+script = ExtResource("1_m6npb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(2, 2)
+texture = ExtResource("2_bj0c7")
+hframes = 4
+frame = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_demgr")

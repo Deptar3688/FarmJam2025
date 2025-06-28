@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqxwrjqw3rswj"]
+
+[ext_resource type="Texture2D" uid="uid://dsqqfnm1psbga" path="res://Assets/Entities/Fireball.png" id="1_abo60"]
+[ext_resource type="Script" path="res://Entities/fireball.gd" id="1_ophdl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h1a1w"]
+radius = 3.0
+
+[node name="Fireball" type="Area2D"]
+position = Vector2(0, -5)
+collision_layer = 2
+script = ExtResource("1_ophdl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_abo60")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_h1a1w")
