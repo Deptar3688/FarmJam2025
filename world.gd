@@ -18,7 +18,7 @@ var gold : int = 100000:
 @onready var CropContainer := $TileMaps/CropContainer
 @onready var wheat_scene = preload("res://Crops/crop_wheat.tscn")
 @onready var tilled_land_scene = preload("res://Selectables/Actions/tilled_land.tscn")
-
+@onready var pitchfork_target_scene = preload("res://Selectables/Actions/pitchfork_attack.tscn")
 # placement indicators
 @onready var HoldingContainer := $UI/HoldingContainer
 var holding : Node2D
@@ -57,11 +57,15 @@ func _process(delta):
 	if holding:
 		holding.position = _mouse_to_tileset_position()
 		
-		if Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
+		if Input.is_action_just_pressed("click") and held_tile == pitchfork_target_scene:
+			if get_global_mouse_position() > $UI/UI.global_position:
+				print("invalid placement")
+			
+		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
 			print("invalid placement")
-	
+		
 # Navigation
 func _update_walkable_tiles():
 	for x in astar.region.size.x:
@@ -139,12 +143,16 @@ func _hold_object(object):
 	holding = object.instantiate()
 	holding.position = _mouse_to_tileset_position()
 	HoldingContainer.add_child(holding)
-	if held_tile != tilled_land_scene:
+	
+	if held_tile == pitchfork_target_scene:
+		placement_mask_current.visible = false
+	elif held_tile != tilled_land_scene:
 		placement_mask_current = placement_mask_crops
+		placement_mask_current.visible = true
 	else:
 		placement_mask_current = placement_mask_till
+		placement_mask_current.visible = true
 		
-	placement_mask_current.visible = true
 	
 func _stop_holding():
 	held_tile = null
@@ -200,11 +208,23 @@ func _on_hoe_holding(object):
 func _on_hoe_stop_holding():
 	_stop_holding()
 
+# scythe selectable
+func _on_scythe_holding(object):
+	_hold_object(object)
+func _on_scythe_stop_holding():
+	_stop_holding()
+
+# spell selectable
+func _on_spell_holding(object):
+	_hold_object(object)
+func _on_spell_stop_holding():
+	_stop_holding()
+	
 # Switch holding
 func _on_grid_container_switch_holding(object):
 	_switch_holding(object.holding_icon)
-
 func _switch_holding(object):
+	placement_mask_current.visible = false
 	_stop_holding()
 
 func show_tooltip(selectable_name: String, description: String, cost: String):
