@@ -39,4 +39,3 @@ func get_closest_enemy():
 			closest_dist = position.distance_to(enemy.position)
 			closest_enemy = enemy
 	return closest_enemy
-
