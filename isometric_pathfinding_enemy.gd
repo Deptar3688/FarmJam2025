@@ -11,6 +11,8 @@ var speed := 1.0
 var astar: AStarGrid2D
 var direction
 
+var _hp: float = 10
+
 @onready var sprite := $EntityContainer/Sprite2D
 
 var is_attacking : bool
@@ -97,3 +99,8 @@ func _on_attack_speed_timeout():
 	fireball2.target_position = to_local(target.global_position)
 	fireball2.position = sprite.position + direction.normalized() * 5
 	fireball_container.add_child(fireball2)
+
+func take_damage(damage: int):
+	_hp -= damage
+	if _hp <= 0:
+		queue_free()

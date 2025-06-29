@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjnuc2ebh1g00"]
+
+[ext_resource type="Script" uid="uid://jp0dmitrkbrs" path="res://Entities/Projectiles/Projectile.gd" id="1_rrbni"]
+[ext_resource type="Texture2D" uid="uid://d05c0smc25q3x" path="res://Assets/Projectiles/TomatoProjectile.png" id="2_rrbni"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ybc0d"]
+radius = 12.0416
+
+[node name="TomatoProjectile" type="Area2D" node_paths=PackedStringArray("sprite", "lifetime_timer")]
+script = ExtResource("1_rrbni")
+sprite = NodePath("Sprite2D")
+lifetime_timer = NodePath("LifetimeTimer")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_rrbni")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ybc0d")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
