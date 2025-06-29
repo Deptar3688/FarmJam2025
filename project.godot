@@ -21,6 +21,10 @@ window/size/viewport_width=1344
 window/size/viewport_height=816
 window/size/resizable=false
 
+[global_group]
+
+Enemy=""
+
 [input]
 
 click={

@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://oqawrtie3t00" path="res://Crops/crop_grape.gd" id="1_2ww30"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_a1md5"]
 
-[node name="CropGrape" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
+[node name="CropGrape" type="Area2D" node_paths=PackedStringArray("shoot_timer", "sprite", "growing_timer")]
 scale = Vector2(2, 2)
 script = ExtResource("1_2ww30")
+shoot_timer = NodePath("ShootTimer")
 crop_name = "grape"
 num_stages = 4
 sprite = NodePath("Sprite2D")
@@ -24,5 +25,9 @@ one_shot = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(16, 0, 0, -8, -16, 0, 0, 8)
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
 
 [connection signal="timeout" from="GrowingTimer" to="." method="_on_growing_timer_timeout"]

@@ -30,3 +30,13 @@ func _start_growing():
 	is_placed = true
 	current_state = State.GROWING
 	growing_timer.start()
+
+func get_closest_enemy():
+	var closest_dist: float = INF
+	var closest_enemy: Enemy
+	for enemy: Enemy in get_tree().get_nodes_in_group("Enemy"):
+		if position.distance_to(enemy.position) < closest_dist:
+			closest_dist = position.distance_to(enemy.position)
+			closest_enemy = enemy
+	return closest_enemy
+

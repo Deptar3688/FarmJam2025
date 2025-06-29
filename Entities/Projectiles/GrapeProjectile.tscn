@@ -7,7 +7,11 @@
 radius = 8.06226
 
 [node name="GrapeProjectile" type="Area2D" node_paths=PackedStringArray("sprite", "lifetime_timer")]
+z_index = 5
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("1_h44bq")
+speed = 150.0
 sprite = NodePath("Sprite2D")
 lifetime_timer = NodePath("LifetimeTimer")
 
@@ -19,5 +23,4 @@ texture = ExtResource("2_ybc0d")
 shape = SubResource("CircleShape2D_ybc0d")
 
 [node name="LifetimeTimer" type="Timer" parent="."]
-wait_time = 10.0
 autostart = true

@@ -7,9 +7,13 @@
 radius = 20.0998
 
 [node name="PumpkinProjectile" type="Area2D" node_paths=PackedStringArray("sprite", "lifetime_timer")]
+z_index = 5
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("1_f07fc")
-rotation_speed = 3.142
+speed = 150.0
 damage = 10
+pierce = 3
 sprite = NodePath("Sprite2D")
 lifetime_timer = NodePath("LifetimeTimer")
 
@@ -21,5 +25,5 @@ texture = ExtResource("2_f07fc")
 shape = SubResource("CircleShape2D_ybc0d")
 
 [node name="LifetimeTimer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 4.0
 autostart = true

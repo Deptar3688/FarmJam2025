@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://cfs30uqojt2bw" path="res://Crops/crop_tomato.gd" id="1_u578h"]
 [ext_resource type="Texture2D" uid="uid://eocsblt83is6" path="res://Assets/BG/Crops.png" id="2_oq01k"]
 
-[node name="CropTomato" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
+[node name="CropTomato" type="Area2D" node_paths=PackedStringArray("shoot_timer", "sprite", "growing_timer")]
 scale = Vector2(2, 2)
 script = ExtResource("1_u578h")
+shoot_timer = NodePath("ShootTimer")
 crop_name = "tomato"
 num_stages = 4
 sprite = NodePath("Sprite2D")
@@ -24,5 +25,9 @@ one_shot = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(16, 0, 0, -8, -16, 0, 0, 8)
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.8
+autostart = true
 
 [connection signal="timeout" from="GrowingTimer" to="." method="_on_growing_timer_timeout"]
