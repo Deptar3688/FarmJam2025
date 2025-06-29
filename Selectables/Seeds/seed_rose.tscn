@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="RoseSeedBag" type="Area2D"]
 script = ExtResource("1_n6t5v")
 holding_icon = ExtResource("2_stq36")
+selectable_name = "Plant Rose Bush"
+description = "A spiky plant that damages nearby enemies."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_xd0o4")

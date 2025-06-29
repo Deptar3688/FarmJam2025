@@ -11,6 +11,8 @@ size = Vector2(46, 46)
 [node name="Hoe" type="Area2D"]
 script = ExtResource("1_y024j")
 holding_icon = ExtResource("2_8pyup")
+selectable_name = "Hoe"
+description = "A handy tool used to till land so that seeds can be planted."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("2_fl1go")

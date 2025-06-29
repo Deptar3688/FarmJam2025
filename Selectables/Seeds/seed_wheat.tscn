@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="WheatSeedBag" type="Area2D"]
 script = ExtResource("1_s2acl")
 holding_icon = ExtResource("2_fxslm")
+selectable_name = "Plant Wheat"
+description = "A staple plant that provides a lot of money when harvested."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_rxtfk")

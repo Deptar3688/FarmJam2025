@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="PumpkinSeedBag" type="Area2D"]
 script = ExtResource("1_2kcdb")
 holding_icon = ExtResource("2_cnetd")
+selectable_name = "Plant Pumpkin"
+description = "A powerful plant that launches massive, heavy pumpkins"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_m5btl")

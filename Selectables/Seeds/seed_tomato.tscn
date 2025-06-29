@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="TomatoSeedBag" type="Area2D"]
 script = ExtResource("1_hor3k")
 holding_icon = ExtResource("2_5wu0n")
+selectable_name = "Plant Tomatoes"
+description = "A reliable plant that rapidly fires medium sized tomatoes."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_uh2qx")

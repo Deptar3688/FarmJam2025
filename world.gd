@@ -3,7 +3,7 @@ extends Node2D
 
 static var instance: World
 
-var gold : int = 1000:
+var gold : int = 100000:
 	set(value):
 		gold = value
 		%GoldLabel.text = str(value)
@@ -32,6 +32,7 @@ var astar := AStarGrid2D.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	instance = self
+	%ToolTipContainer.visible = false
 	gold = gold
 	#var TL_tile = Vector2i(-1,0)
 	#var BL_tile = Vector2i(25,26)
@@ -205,3 +206,12 @@ func _on_grid_container_switch_holding(object):
 
 func _switch_holding(object):
 	_stop_holding()
+
+func show_tooltip(selectable_name: String, description: String, cost: String):
+	%ToolTipContainer.visible = true
+	%SelectableNameLabel.text = selectable_name
+	%SelectableDescriptionLabel.text = description
+	%SelectableCostLabel.text = cost
+
+func hide_tooltip():
+	%ToolTipContainer.visible = false

@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="GrapeSeedBag" type="Area2D"]
 script = ExtResource("1_nuijc")
 holding_icon = ExtResource("2_72b33")
+selectable_name = "Plant Grapes"
+description = "A defensive plant that fires clusters of grapeshot."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_mnqqb")

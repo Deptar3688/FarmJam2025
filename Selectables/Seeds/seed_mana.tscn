@@ -11,6 +11,8 @@ size = Vector2(42, 42)
 [node name="ManaSeedBag" type="Area2D"]
 script = ExtResource("1_pohf0")
 holding_icon = ExtResource("2_pohf0")
+selectable_name = "Plant Mana Flower"
+description = "A magical plant that increases arcane regeneration."
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_0ckpd")
