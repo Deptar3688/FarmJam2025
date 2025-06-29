@@ -1,7 +1,13 @@
 class_name World
 extends Node2D
 
-var gold : int
+static var instance: World
+
+var gold : int = 1000:
+	set(value):
+		gold = value
+		%GoldLabel.text = str(value)
+
 
 @onready var tilemap := $TileMaps/Layer0
 @onready var placement_mask_till := $TileMaps/PlacementMaskTill
@@ -25,6 +31,8 @@ var astar := AStarGrid2D.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	instance = self
+	gold = gold
 	#var TL_tile = Vector2i(-1,0)
 	#var BL_tile = Vector2i(25,26)
 	#var TR_tile = Vector2i(14,-15)
@@ -194,5 +202,6 @@ func _on_hoe_stop_holding():
 # Switch holding
 func _on_grid_container_switch_holding(object):
 	_switch_holding(object.holding_icon)
+
 func _switch_holding(object):
 	_stop_holding()

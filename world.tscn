@@ -286,6 +286,14 @@ offset_bottom = 54.0
 grow_horizontal = 2
 texture = ExtResource("4_soyel")
 
+[node name="GoldLabel" type="Label" parent="UI/UI/Portrait/StatsAlt"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 82.0
+offset_top = -2.0
+offset_right = 119.0
+offset_bottom = 21.0
+
 [node name="GameTools" type="GridContainer" parent="UI/UI"]
 layout_mode = 1
 anchors_preset = 5

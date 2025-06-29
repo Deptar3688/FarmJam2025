@@ -19,9 +19,20 @@ func _ready():
 func _process(delta):
 	if is_currently_hovered and Input.is_action_just_pressed("click"):
 		if !selected:
-			selected = true
-			selected_self.emit(self)
-			holding.emit(holding_icon)
+			var temp_obj = holding_icon.instantiate()
+			# If it's a crop, check if the player has enough money.
+			# Right now, do nothing if they don't have enough money
+			if temp_obj is Crop:
+				if temp_obj.gold_cost > World.instance.gold:
+					print("Not enough money. You have %s, and need %s" % [World.instance.gold, temp_obj.gold_cost])
+				else:
+					selected = true
+					selected_self.emit(self)
+					holding.emit(holding_icon)
+			else:
+				selected = true
+				selected_self.emit(self)
+				holding.emit(holding_icon)
 		else:
 			selected = false
 			stop_holding.emit()

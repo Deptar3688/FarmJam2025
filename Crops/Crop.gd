@@ -6,6 +6,9 @@ extends Node2D
 @export var sprite: Sprite2D
 @export var growing_timer: Timer
 @export var health: Array[int] # changes depending on growth stage
+
+@export var gold_cost: int = 0
+
 enum State {PLACING, GROWING, MATURE, ENCHANCED}
 var is_placed : bool
 var is_enchanced : bool
@@ -32,6 +35,8 @@ func _start_growing():
 	is_placed = true
 	current_state = State.GROWING
 	growing_timer.start()
+
+	World.instance.gold -= gold_cost
 
 func get_closest_enemy():
 	var closest_dist: float = INF
