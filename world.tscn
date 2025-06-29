@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=29 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://d3jrdnedfjb5i" path="res://Selectables/Seeds/seed_grape.tscn" id="18_n5bmx"]
 [ext_resource type="PackedScene" uid="uid://bo1invc5kkrom" path="res://Selectables/Seeds/seed_tomato.tscn" id="19_01wst"]
 [ext_resource type="PackedScene" uid="uid://sko4n32qhng3" path="res://Selectables/Seeds/seed_pumpkin.tscn" id="20_oi1q5"]
+[ext_resource type="Script" uid="uid://cxb3bhuh5trp2" path="res://EnemySpawner.gd" id="21_bc84e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -404,6 +405,25 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 position = Vector2(24, 24)
 
 [node name="HoldingContainer" type="Node2D" parent="UI"]
+
+[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point")]
+script = ExtResource("21_bc84e")
+tower = NodePath("../EntityContainer/Tower")
+world = NodePath("..")
+enemy_spawn_timer = NodePath("EnemySpawnTimer")
+tilemap = NodePath("../TileMaps/Layer0")
+top_left_point = NodePath("TopLeftMostSpawnPoint")
+bottom_right_point = NodePath("BottomRightMostSpawnPoint2")
+
+[node name="EnemySpawnTimer" type="Timer" parent="EnemySpawner"]
+wait_time = 0.5
+autostart = true
+
+[node name="TopLeftMostSpawnPoint" type="Marker2D" parent="EnemySpawner"]
+position = Vector2(29, -10)
+
+[node name="BottomRightMostSpawnPoint2" type="Marker2D" parent="EnemySpawner"]
+position = Vector2(942, 806)
 
 [connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel2/Hoe" to="." method="_on_hoe_holding"]

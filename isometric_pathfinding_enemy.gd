@@ -1,3 +1,4 @@
+class_name Enemy
 extends CharacterBody2D
 
 @export var original_target: Node2D
@@ -72,7 +73,7 @@ func _physics_process(delta):
 		#speed = 1.0
 
 func _on_aggro_range_area_entered(area):
-	if area.name != "Tower":
+	if area is Crop: 
 		if area.current_state != 0: # if placed
 			var new_path = generate_path_to_target(area)
 			if generate_path_to_target(target).size() > new_path.size():
@@ -84,7 +85,7 @@ func _on_aggro_range_area_entered(area):
 		print(area.name)
 
 func _on_attack_range_area_entered(area):
-	if area.name != "Tower":
+	if area is Crop:
 		if area.current_state != 0:
 			is_attacking = true
 			attack_cooldown.start()

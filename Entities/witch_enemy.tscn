@@ -31,13 +31,13 @@ position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_ycny0")
 
 [node name="AggroRange" type="Area2D" parent="."]
-collision_layer = 2
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AggroRange"]
 shape = SubResource("CircleShape2D_rac8w")
 
 [node name="AttackRange" type="Area2D" parent="."]
-collision_layer = 2
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
 shape = SubResource("CircleShape2D_ink4a")
