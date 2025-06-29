@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=32 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
@@ -17,10 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://cbbv2urlky0vk" path="res://Selectables/Actions/hoe.tscn" id="11_v4f2c"]
 [ext_resource type="Script" uid="uid://dthwgfd4hon7a" path="res://grid_container.gd" id="13_smjfs"]
 [ext_resource type="PackedScene" uid="uid://0hv6gw0dus4f" path="res://Selectables/Seeds/seed_wheat.tscn" id="16_sovf1"]
+[ext_resource type="PackedScene" uid="uid://bthvojucjwuj1" path="res://Selectables/Seeds/seed_mana.tscn" id="17_wjb0r"]
 [ext_resource type="PackedScene" uid="uid://d3jrdnedfjb5i" path="res://Selectables/Seeds/seed_grape.tscn" id="18_n5bmx"]
 [ext_resource type="PackedScene" uid="uid://bo1invc5kkrom" path="res://Selectables/Seeds/seed_tomato.tscn" id="19_01wst"]
+[ext_resource type="PackedScene" uid="uid://dcr5rnvb2mn56" path="res://Selectables/Seeds/seed_rose.tscn" id="20_mc2jv"]
 [ext_resource type="PackedScene" uid="uid://sko4n32qhng3" path="res://Selectables/Seeds/seed_pumpkin.tscn" id="20_oi1q5"]
 [ext_resource type="Script" uid="uid://cxb3bhuh5trp2" path="res://EnemySpawner.gd" id="21_bc84e"]
+[ext_resource type="PackedScene" uid="uid://2uj38rklrb8k" path="res://Selectables/Seeds/seed_torch.tscn" id="22_bo7i5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -322,6 +325,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
 [node name="WheatSeedBag" parent="UI/UI/GridContainer/Panel" instance=ExtResource("16_sovf1")]
 position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel2" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -329,8 +333,9 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
-[node name="Hoe" parent="UI/UI/GridContainer/Panel2" instance=ExtResource("11_v4f2c")]
-position = Vector2(25, 24)
+[node name="ManaSeedBag" parent="UI/UI/GridContainer/Panel2" instance=ExtResource("17_wjb0r")]
+position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel3" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -349,6 +354,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
 [node name="GrapeSeedBag" parent="UI/UI/GridContainer/Panel4" instance=ExtResource("18_n5bmx")]
 position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel5" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -356,8 +362,9 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
-[node name="Hoe" parent="UI/UI/GridContainer/Panel5" instance=ExtResource("11_v4f2c")]
-position = Vector2(25, 24)
+[node name="RoseSeedBag" parent="UI/UI/GridContainer/Panel5" instance=ExtResource("20_mc2jv")]
+position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel6" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -376,6 +383,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
 [node name="TomatoSeedBag" parent="UI/UI/GridContainer/Panel7" instance=ExtResource("19_01wst")]
 position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel8" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -383,8 +391,9 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
-[node name="Hoe" parent="UI/UI/GridContainer/Panel8" instance=ExtResource("11_v4f2c")]
-position = Vector2(25, 24)
+[node name="TorchSeedBag" parent="UI/UI/GridContainer/Panel8" instance=ExtResource("22_bo7i5")]
+position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="Panel9" type="Panel" parent="UI/UI/GridContainer"]
 custom_minimum_size = Vector2(48, 48)
@@ -403,6 +412,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_colq1")
 
 [node name="PumpkinSeedBag" parent="UI/UI/GridContainer/Panel10" instance=ExtResource("20_oi1q5")]
 position = Vector2(24, 24)
+collision_layer = 4
 
 [node name="HoldingContainer" type="Node2D" parent="UI"]
 
@@ -426,15 +436,23 @@ position = Vector2(29, -10)
 position = Vector2(942, 806)
 
 [connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]
-[connection signal="holding" from="UI/UI/GridContainer/Panel2/Hoe" to="." method="_on_hoe_holding"]
-[connection signal="stop_holding" from="UI/UI/GridContainer/Panel2/Hoe" to="." method="_on_hoe_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel/WheatSeedBag" to="." method="_on_wheat_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel/WheatSeedBag" to="." method="_on_wheat_seed_bag_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel2/ManaSeedBag" to="." method="_on_mana_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel2/ManaSeedBag" to="." method="_on_mana_seed_bag_stop_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel3/Hoe" to="." method="_on_hoe_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel3/Hoe" to="." method="_on_hoe_stop_holding"]
-[connection signal="holding" from="UI/UI/GridContainer/Panel5/Hoe" to="." method="_on_hoe_holding"]
-[connection signal="stop_holding" from="UI/UI/GridContainer/Panel5/Hoe" to="." method="_on_hoe_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel4/GrapeSeedBag" to="." method="_on_grape_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel4/GrapeSeedBag" to="." method="_on_grape_seed_bag_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel5/RoseSeedBag" to="." method="_on_rose_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel5/RoseSeedBag" to="." method="_on_rose_seed_bag_stop_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel6/Hoe" to="." method="_on_hoe_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel6/Hoe" to="." method="_on_hoe_stop_holding"]
-[connection signal="holding" from="UI/UI/GridContainer/Panel8/Hoe" to="." method="_on_hoe_holding"]
-[connection signal="stop_holding" from="UI/UI/GridContainer/Panel8/Hoe" to="." method="_on_hoe_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel7/TomatoSeedBag" to="." method="_on_tomato_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel7/TomatoSeedBag" to="." method="_on_tomato_seed_bag_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel8/TorchSeedBag" to="." method="_on_torch_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel8/TorchSeedBag" to="." method="_on_torch_seed_bag_stop_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel9/Hoe" to="." method="_on_hoe_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel9/Hoe" to="." method="_on_hoe_stop_holding"]
+[connection signal="holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_holding"]
+[connection signal="stop_holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_stop_holding"]

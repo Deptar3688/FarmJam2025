@@ -24,7 +24,6 @@ func _ready():
 	is_enchanced = false
 	current_stage = 0
 	current_hp = health[0]
-	sprite.frame = current_stage
 
 
 func _start_growing():

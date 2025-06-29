@@ -3,9 +3,14 @@
 [ext_resource type="Script" uid="uid://bq7oo7fghw2cv" path="res://Crops/flower_rose.gd" id="1_yq80v"]
 [ext_resource type="Texture2D" uid="uid://284rfwfqduo5" path="res://Assets/BG/flowers.png" id="2_otjs3"]
 
-[node name="FlowerRose" type="Area2D"]
+[node name="FlowerRose" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
 scale = Vector2(2, 2)
 script = ExtResource("1_yq80v")
+crop_name = "rose_bush"
+num_stages = 3
+sprite = NodePath("Sprite2D")
+growing_timer = NodePath("GrowingTimer")
+health = Array[int]([1, 2, 3])
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)

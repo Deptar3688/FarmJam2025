@@ -1,0 +1,20 @@
+[gd_scene load_steps=6 format=3 uid="uid://2uj38rklrb8k"]
+
+[ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_2tsn1"]
+[ext_resource type="PackedScene" uid="uid://b1t8m4bif7h4t" path="res://Crops/flower_torch.tscn" id="2_2tsn1"]
+[ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="3_n0mnw"]
+[ext_resource type="Texture2D" uid="uid://dpmt0p13vyg2k" path="res://Assets/UI/Interactables-TorchSeeds.png" id="4_ts1kj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0xjn"]
+size = Vector2(42, 42)
+
+[node name="TorchSeedBag" type="Area2D"]
+script = ExtResource("1_2tsn1")
+holding_icon = ExtResource("2_2tsn1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("3_n0mnw")
+texture = ExtResource("4_ts1kj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_q0xjn")

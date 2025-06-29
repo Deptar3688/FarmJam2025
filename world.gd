@@ -39,8 +39,8 @@ func _ready():
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # disable diagonal movement
 	astar.update()
 	_update_walkable_tiles()
-	spawn_enemy_at(Vector2i(15,-5), tower)
-	spawn_enemy_at(Vector2i(31,12), tower)
+	#spawn_enemy_at(Vector2i(15,-5), tower)
+	#spawn_enemy_at(Vector2i(31,12), tower)
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -136,20 +136,56 @@ func _stop_holding():
 	holding = null
 	placement_mask_current.visible = false
 
-func _switch_holding(object):
+# Wheat selectable 
+func _on_wheat_seed_bag_holding(object):
+	_hold_object(object)
+func _on_wheat_seed_bag_stop_holding():
 	_stop_holding()
 
-func _on_seed_bag_holding(object):
+# Grape selectable
+func _on_grape_seed_bag_holding(object):
 	_hold_object(object)
+func _on_grape_seed_bag_stop_holding():
+	_stop_holding()
 
+# Tomato selectable
+func _on_tomato_seed_bag_holding(object):
+	_hold_object(object)
+func _on_tomato_seed_bag_stop_holding():
+	_stop_holding()
+
+# Pumpkin selectable 
+func _on_pumpkin_seed_bag_holding(object):
+	_hold_object(object)
+func _on_pumpkin_seed_bag_stop_holding():
+	_stop_holding()
+
+# Mana selectable 
+func _on_mana_seed_bag_holding(object):
+	_hold_object(object)
+func _on_mana_seed_bag_stop_holding():
+	_stop_holding()
+
+# Rose selectable 
+func _on_rose_seed_bag_holding(object):
+	_hold_object(object)
+func _on_rose_seed_bag_stop_holding():
+	_stop_holding()
+	
+# Torch selectable
+func _on_torch_seed_bag_holding(object):
+	_hold_object(object)
+func _on_torch_seed_bag_stop_holding():
+	_stop_holding()
+ 
+# hoe selectable
 func _on_hoe_holding(object):
 	_hold_object(object)
-
-func _on_seed_bag_stop_holding():
-	_stop_holding()
-
 func _on_hoe_stop_holding():
 	_stop_holding()
 
+# Switch holding
 func _on_grid_container_switch_holding(object):
 	_switch_holding(object.holding_icon)
+func _switch_holding(object):
+	_stop_holding()
