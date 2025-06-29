@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bcrovy0vk2c7k"]
+[gd_scene load_steps=6 format=3 uid="uid://bcrovy0vk2c7k"]
 
 [ext_resource type="Script" uid="uid://bojfsmtsy7lk3" path="res://isometric_pathfinding_enemy.gd" id="1_2m0db"]
 [ext_resource type="Texture2D" uid="uid://b3yvov8rlil58" path="res://Assets/Entities/SpellThief_Witch.png" id="1_tanu1"]
-[ext_resource type="PackedScene" uid="uid://cqxwrjqw3rswj" path="res://Entities/fireball.tscn" id="3_vg7xu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ycny0"]
 radius = 6.0
@@ -43,9 +42,6 @@ collision_layer = 0
 shape = SubResource("CircleShape2D_ink4a")
 
 [node name="AttackSpeed" type="Timer" parent="."]
-
-[node name="Fireball" parent="." instance=ExtResource("3_vg7xu")]
-visible = false
 
 [connection signal="area_entered" from="AggroRange" to="." method="_on_aggro_range_area_entered"]
 [connection signal="area_entered" from="AttackRange" to="." method="_on_attack_range_area_entered"]

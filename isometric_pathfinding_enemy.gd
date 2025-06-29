@@ -18,7 +18,6 @@ var _hp: float = 10
 var is_attacking : bool
 @onready var attack_range := $AttackRange
 @onready var attack_cooldown := $AttackSpeed
-@onready var fireball := $Fireball
 @onready var fireball_scene := preload("res://Entities/fireball.tscn")
 @onready var fireball_container := $EntityContainer 
 
@@ -37,6 +36,7 @@ func generate_path_to_target(target_local):
 	return astar.get_id_path(start, target_position)
 	
 func _physics_process(delta):
+	
 	if path_index >= path.size():
 		return
 	
@@ -102,5 +102,21 @@ func _on_attack_speed_timeout():
 
 func take_damage(damage: int):
 	_hp -= damage
+	
+	shake_sprite()
+	#damage flash
+	var tween := create_tween()
+	tween.tween_property(sprite, "modulate", Color.RED, 0.01)
+	tween.tween_property(sprite, "modulate", Color(1, 1, 1), 0.1)
+	
 	if _hp <= 0:
 		queue_free()
+	
+func shake_sprite(intensity := 1.5, duration := 0.2, shakes := 3):
+	var tween := create_tween()
+	var original_position = sprite.position
+	
+	for i in shakes:
+		var offset = Vector2(randf_range(-intensity, intensity), 0)
+		tween.tween_property(sprite, "position", original_position + offset, duration / (shakes * 2))
+		tween.tween_property(sprite, "position", original_position, duration / (shakes * 2))
