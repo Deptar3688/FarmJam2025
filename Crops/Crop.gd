@@ -18,6 +18,8 @@ var current_stage
 @export var attack_spd: int
 @export var attack_range: int
 
+signal has_died()
+
 func _ready():
 	current_state = State.PLACING
 	is_placed = false
@@ -39,3 +41,10 @@ func get_closest_enemy():
 			closest_dist = position.distance_to(enemy.position)
 			closest_enemy = enemy
 	return closest_enemy
+
+func take_damage(damage: int):
+	print(current_hp)
+	current_hp -= damage
+	if current_hp <= 0:
+		has_died.emit()
+		queue_free()

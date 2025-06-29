@@ -27,5 +27,6 @@ func _on_growing_timer_timeout():
 		sprite.frame += 1
 		if current_stage == num_stages-1:
 			current_state = State.MATURE
+			growing_timer.stop()
 		else:
 			growing_timer.start()

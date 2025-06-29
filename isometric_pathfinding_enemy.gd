@@ -36,43 +36,41 @@ func generate_path_to_target(target_local):
 	return astar.get_id_path(start, target_position)
 	
 func _physics_process(delta):
-	
-	if path_index >= path.size():
-		return
-	
-	var tile = path[path_index]
-	var target_pos = tilemap.to_global(tilemap.map_to_local(tile))
-	direction = (target_pos - global_position)
-	
-	# update sprite
-	if direction.x < 0 and direction.y < 0:
-		sprite.frame = 0
-	elif direction.x > 0 and direction.y < 0:
-		sprite.frame = 1
-	elif direction.x > 0 and direction.y > 0:
-		sprite.frame = 2
-	elif direction.x < 0 and direction.y > 0:
-		sprite.frame = 3
-	
-	if direction.length() < 2:
-		path_index += 1
-	else:
-		position += direction.normalized() * speed
-	
-	#fireball.position = sprite.position + direction.normalized() * 5
-	
+	if target != original_target and !is_instance_valid(target):
+		speed = 1
+		is_attacking = false
+		attack_cooldown.stop()
+		target = original_target
+		path = generate_path_to_target(target)
+
+	if path_index < path.size():
+		var tile = path[path_index]
+		var target_pos = tilemap.to_global(tilemap.map_to_local(tile))
+		direction = (target_pos - global_position)
+		
+		# update sprite
+		if direction.x < 0 and direction.y < 0:
+			sprite.frame = 0
+		elif direction.x > 0 and direction.y < 0:
+			sprite.frame = 1
+		elif direction.x > 0 and direction.y > 0:
+			sprite.frame = 2
+		elif direction.x < 0 and direction.y > 0:
+			sprite.frame = 3
+		
+		if direction.length() < 2:
+			path_index += 1
+		else:
+			position += direction.normalized() * speed
+		
 	if is_attacking:
 		speed = 0
-	
-		if !attack_range.has_overlapping_areas():
+		if !is_instance_valid(target):
 			is_attacking = false
 			attack_cooldown.stop()
+			target = original_target
 			path = generate_path_to_target(original_target)
-		
-	
-	#for area in attack_range.get_overlapping_areas():
-		#attack_cooldown.autostart = false
-		#speed = 1.0
+			speed = 1
 
 func _on_aggro_range_area_entered(area):
 	if area is Crop: 
@@ -94,10 +92,12 @@ func _on_attack_range_area_entered(area):
 	else:
 		is_attacking = true
 		attack_cooldown.start()
+
 func _on_attack_speed_timeout():
 	var fireball2 = fireball_scene.instantiate()
 	fireball2.target_position = to_local(target.global_position)
 	fireball2.position = sprite.position + direction.normalized() * 5
+	fireball2.node_to_damage = target
 	fireball_container.add_child(fireball2)
 
 func take_damage(damage: int):

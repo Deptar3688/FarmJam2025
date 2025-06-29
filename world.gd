@@ -83,13 +83,16 @@ func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
 func _place_tile():
 	var new_crop = held_tile.instantiate()
 	var tile_pos = _mouse_to_tileset_position()
-	new_crop.position = tile_pos
-	CropContainer.add_child(new_crop)
-	
+
 	# update placement mask
 	var mouse_pos = get_global_mouse_position()
 	var local_pos = placement_mask_current.to_local(mouse_pos)
 	var tile_coords = placement_mask_current.local_to_map(local_pos)
+
+	new_crop.position = tile_pos
+	CropContainer.add_child(new_crop)
+	if new_crop is Crop:
+		new_crop.has_died.connect(_reenable_tile.bind(tile_coords), CONNECT_ONE_SHOT)
 	
 	if held_tile != tilled_land_scene:
 		new_crop._start_growing()
@@ -97,6 +100,10 @@ func _place_tile():
 	elif held_tile == tilled_land_scene:
 		placement_mask_till.set_cell(tile_coords, 1, Vector2i(0,1))
 		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
+
+func _reenable_tile(tile_coords: Vector2i):
+	print(tile_coords)
+	placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 # checks PlacementMask to see if area is valid
 func is_tile_placeable(tile_pos: Vector2i):
