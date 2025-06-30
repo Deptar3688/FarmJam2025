@@ -27,7 +27,19 @@ var wave : int = 1:
 		%WaveLabel.text = "Wave: " + str(value)
 var spawn_speed
 
-@onready var night_filter := $UI/NightFilter
+@onready var night_filter := %NightFilter
+# var _night_filter_tween: Tween
+var is_night: bool = true:
+	set(value):
+		if value != is_night:
+			if value == true:
+				night_filter.visible = true
+				create_tween().tween_property(night_filter, "color:a", 0.8, 0.5)\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			else:
+				create_tween().tween_property(night_filter, "color:a", 0.0, 0.5)\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			is_night = value
 @onready var wave_timer := $WaveTimer 
 @onready var wave_bar := %WaveBar
 
@@ -85,15 +97,15 @@ func _process(delta):
 			panel.get_child(0)._update_visual()
 	##
 	
-	if !is_in_wave :
+	if !is_in_wave:
 		mana = MAX_MANA
-		if !night_filter.visible: night_filter.visible = true
 		wave_bar.value = 30
 	else:
 		wave_bar.value = wave_timer.time_left
 		if $EnemySpawner/EnemySpawnTimer.is_stopped() and get_tree().get_node_count_in_group("Enemy") <= 0:
 			wave += 1
 			is_in_wave = false
+			is_night = true
 			for entity in CropContainer.get_children():
 				if entity is Crop:
 					entity.harvest()
@@ -334,7 +346,7 @@ func _on_cancel_selection_button_pressed():
 			panel.get_child(0).deselect()
 
 func _on_start_pause_button_pressed():
-	if night_filter.visible: night_filter.visible = false
+	is_night = false
 	is_in_wave = true
 	if wave <= 10:
 		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
