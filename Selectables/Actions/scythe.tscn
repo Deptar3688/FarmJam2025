@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dv0w86tmw8r7m"]
 
 [ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_7npsr"]
-[ext_resource type="PackedScene" uid="uid://liegltq4j4bx" path="res://Selectables/Actions/tilled_land.tscn" id="2_6usu0"]
+[ext_resource type="PackedScene" uid="uid://b4q6deag8pgix" path="res://Selectables/Actions/scythe_target.tscn" id="2_7npsr"]
 [ext_resource type="Material" uid="uid://g7gd8uy0505q" path="res://Assets/UI/InteractableMaterial.tres" id="3_3holw"]
 [ext_resource type="Texture2D" uid="uid://cy0bjho00xbw5" path="res://Assets/UI/Interactables-Scythe.png" id="4_7npsr"]
 
@@ -10,7 +10,7 @@ size = Vector2(41.5, 42)
 
 [node name="Scythe" type="Area2D"]
 script = ExtResource("1_7npsr")
-holding_icon = ExtResource("2_6usu0")
+holding_icon = ExtResource("2_7npsr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_3holw")

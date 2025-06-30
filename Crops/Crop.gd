@@ -8,6 +8,7 @@ extends Node2D
 @export var health: Array[int] # changes depending on growth stage
 
 @export var gold_cost: int = 0
+@export var gold_value: int = 0
 
 enum State {PLACING, GROWING, MATURE, ENCHANCED}
 var is_placed : bool
@@ -30,7 +31,6 @@ func _ready():
 	current_stage = 0
 	current_hp = health[0]
 
-
 func _start_growing():
 	is_placed = true
 	current_state = State.GROWING
@@ -52,4 +52,9 @@ func take_damage(damage: int):
 	current_hp -= damage
 	if current_hp <= 0:
 		has_died.emit()
+		queue_free()
+
+func harvest():
+	if current_state == State.MATURE:
+		World.instance.gold += gold_value
 		queue_free()

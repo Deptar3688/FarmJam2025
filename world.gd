@@ -8,7 +8,10 @@ var gold : int = 100000:
 		gold = value
 		%GoldLabel.text = str(value)
 
-var mana : int = 100
+const MAX_HEALTH : int = 100
+const MAX_MANA : int = 100
+var health := MAX_HEALTH
+var mana := MAX_MANA
 
 @onready var tilemap := $TileMaps/Layer0
 @onready var placement_mask_till := $TileMaps/PlacementMaskTill
@@ -21,7 +24,7 @@ var mana : int = 100
 @onready var tilled_land_scene = preload("res://Selectables/Actions/tilled_land.tscn")
 @onready var pitchfork_target_scene = preload("res://Selectables/Actions/attack_target.tscn")
 @onready var pitchfork_spell_scene = preload("res://Selectables/Actions/pitchfork_spell.tscn")
-
+@onready var scythe_target_scene = preload("res://Selectables/Actions/scythe_target.tscn")
 # placement indicators
 @onready var HoldingContainer := $UI/HoldingContainer
 var holding : Node2D
@@ -44,18 +47,14 @@ func _ready():
 	var center_tile = Vector2i(19,5)
 	
 	# AStarGrid2D
-	var map_size = Vector2i(41, 41)  # size of your grid
+	var map_size = Vector2i(41, 41)  # size of grid
 	astar.region = Rect2i(Vector2i(-1, -15), map_size) # for diamond down
 	astar.cell_size = Vector2(32, 16)  # isometric tile size
 
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # disable diagonal movement
 	astar.update()
 	_update_walkable_tiles()
-	#spawn_enemy_at(Vector2i(15,-5), tower)
-	#spawn_enemy_at(Vector2i(31,12), tower)
-	
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _process(delta):
 	if holding:
 		holding.position = _mouse_to_tileset_position()
@@ -67,10 +66,21 @@ func _process(delta):
 				for i in range(3):
 					await get_tree().create_timer(0.04).timeout
 					_cast_spell(holding.position)
+		elif Input.is_action_just_pressed("click") and held_tile == scythe_target_scene:
+			_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
 			print("invalid placement")
+
+# harvest
+func _harvest_crop(target_position:Vector2):
+	for crop in CropContainer.get_children():
+		if crop is Crop:
+			var tile_coords = tilemap.local_to_map(crop.global_position)
+			if crop.position == target_position:
+				crop.harvest()
+	pass
 
 # spellcast
 func _cast_spell(location : Vector2i):
@@ -137,7 +147,7 @@ func _place_tile():
 		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 func _reenable_tile(tile_coords: Vector2i):
-	print(tile_coords)
+	#print(tile_coords)
 	placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 # checks PlacementMask to see if area is valid
@@ -166,7 +176,7 @@ func _hold_object(object):
 	holding.position = _mouse_to_tileset_position()
 	HoldingContainer.add_child(holding)
 	
-	if held_tile == pitchfork_target_scene:
+	if held_tile == pitchfork_target_scene or held_tile == scythe_target_scene:
 		placement_mask_current.visible = false
 	elif held_tile != tilled_land_scene:
 		placement_mask_current = placement_mask_crops

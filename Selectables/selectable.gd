@@ -66,7 +66,6 @@ func _update_visual():
 
 func deselect():
 	selected = false
-	print("oi")
 	_update_visual()
 
 func _get_object():

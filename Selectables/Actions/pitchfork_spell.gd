@@ -11,7 +11,6 @@ func _ready():
 
 	sprite.frame = rng.randi_range(0,1)
 	end_position = position
-	print(global_position, end_position)
 	collision.visible = false
 	has_landed = false
 	global_position.y = end_position.y - 800

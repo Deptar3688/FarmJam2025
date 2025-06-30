@@ -1,3 +1,4 @@
+class_name Tower
 extends Area2D
 
 var health : int
@@ -8,7 +9,7 @@ var current_hp : int
 var can_attack : bool
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	health = 20
+	health = 200
 	mana = 100
 	current_hp = health
 

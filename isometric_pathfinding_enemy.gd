@@ -32,9 +32,12 @@ func set_astar_data(_astar: AStarGrid2D, _tilemaplayer: TileMapLayer):
 
 func generate_path_to_target(target_local):
 	var start = tilemap.local_to_map(tilemap.to_local(global_position))
-	var target_position = tilemap.local_to_map(tilemap.to_local(target_local.global_position))
-	return astar.get_id_path(start, target_position)
-	
+	if target_local:
+		var target_position = tilemap.local_to_map(tilemap.to_local(target_local.global_position))
+		return astar.get_id_path(start, target_position)
+	else:
+		generate_path_to_target(original_target)
+		
 func _physics_process(delta):
 	if target != original_target and !is_instance_valid(target):
 		speed = 1
@@ -82,7 +85,8 @@ func _on_aggro_range_area_entered(area):
 				path_index = 1
 			
 	else:
-		print(area.name)
+		#print(area.name)
+		pass
 
 func _on_attack_range_area_entered(area):
 	if area is Crop:
