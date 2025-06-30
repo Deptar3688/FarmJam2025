@@ -29,8 +29,8 @@
 [ext_resource type="Script" uid="uid://cxb3bhuh5trp2" path="res://EnemySpawner.gd" id="21_bc84e"]
 [ext_resource type="PackedScene" uid="uid://2uj38rklrb8k" path="res://Selectables/Seeds/seed_torch.tscn" id="22_bo7i5"]
 [ext_resource type="Texture2D" uid="uid://b67pn24mm5ro7" path="res://Assets/UI/CancelSelection.png" id="23_mc2jv"]
-[ext_resource type="PackedScene" uid="uid://dv0w86tmw8r7m" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
-[ext_resource type="PackedScene" uid="uid://dwlqhh6ykawyd" path="res://Selectables/Actions/spell.tscn" id="28_qktwf"]
+[ext_resource type="PackedScene" uid="uid://bkifv7s8tifef" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
+[ext_resource type="PackedScene" uid="uid://7i40qt7mp2o8" path="res://Selectables/Actions/spell.tscn" id="28_qktwf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -252,7 +252,7 @@ visible = false
 offset_top = -1.0
 offset_right = 1344.0
 offset_bottom = 815.0
-color = Color(4.63258e-07, 0.207029, 0.207029, 0.741176)
+color = Color(0.197559, 0.13162, 0.0605625, 0.741176)
 
 [node name="UI" type="TextureRect" parent="UI"]
 anchors_preset = 1

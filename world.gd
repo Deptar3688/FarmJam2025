@@ -18,7 +18,7 @@ var health : int = MAX_HEALTH:
 var mana : int = MAX_MANA:
 	set(value):
 		mana = clampi(value, 0, MAX_MANA)
-		%ManaLabel.text = str(value)
+		%ManaLabel.text = str(mana)
 
 var is_in_wave := false
 var wave : int = 1:
@@ -86,7 +86,7 @@ func _process(delta):
 	##
 	
 	if !is_in_wave :
-		mana = 100
+		mana = MAX_MANA
 		if !night_filter.visible: night_filter.visible = true
 		wave_bar.value = 30
 	else:
@@ -97,6 +97,9 @@ func _process(delta):
 			for entity in CropContainer.get_children():
 				if entity is Crop:
 					entity.harvest()
+				elif entity is TilledLand:
+					_reset_tile(tilemap.local_to_map(entity.position / 2))
+					entity.queue_free()
 				else:
 					entity.queue_free()
 	if holding:
@@ -112,6 +115,10 @@ func _process(delta):
 						await get_tree().create_timer(0.04).timeout
 						_cast_spell(holding.position)
 		elif Input.is_action_just_pressed("click") and held_tile == scythe_target_scene:
+			for entity in CropContainer.get_children():
+				# Remove the tilled land at the scythe position
+				if entity is TilledLand and tilemap.local_to_map(entity.position) == tilemap.local_to_map(holding.position):
+					entity.queue_free()
 			_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			_place_tile()
@@ -125,7 +132,6 @@ func _harvest_crop(target_position:Vector2):
 			var tile_coords = tilemap.local_to_map(crop.global_position)
 			if crop.position == target_position and mana >= 5:
 				crop.harvest()
-	pass
 
 # spellcast
 func _cast_spell(location : Vector2i):
@@ -182,7 +188,10 @@ func _place_tile():
 	new_crop.position = tile_pos
 	CropContainer.add_child(new_crop)
 	if new_crop is Crop:
+		# Make the tile plantable again if the crop has died from enemies
 		new_crop.has_died.connect(_reenable_tile.bind(tile_coords), CONNECT_ONE_SHOT)
+		# Reset the tile the crop is on if its being harvested
+		new_crop.has_been_harvested.connect(_reset_tile.bind(tile_coords), CONNECT_ONE_SHOT)
 	
 	if held_tile != tilled_land_scene:
 		new_crop._start_growing()
@@ -193,8 +202,11 @@ func _place_tile():
 		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 func _reenable_tile(tile_coords: Vector2i):
-	#print(tile_coords)
 	placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
+
+func _reset_tile(tile_coords: Vector2i):
+	placement_mask_till.set_cell(tile_coords, 0, Vector2i(0,1))
+	placement_mask_crops.set_cell(tile_coords, 1, Vector2i(0,1))
 
 # checks PlacementMask to see if area is valid
 func is_tile_placeable(tile_pos: Vector2i):
