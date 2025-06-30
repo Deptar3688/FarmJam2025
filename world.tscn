@@ -28,8 +28,8 @@
 [ext_resource type="Script" uid="uid://cxb3bhuh5trp2" path="res://EnemySpawner.gd" id="21_bc84e"]
 [ext_resource type="PackedScene" uid="uid://2uj38rklrb8k" path="res://Selectables/Seeds/seed_torch.tscn" id="22_bo7i5"]
 [ext_resource type="Texture2D" uid="uid://b67pn24mm5ro7" path="res://Assets/UI/CancelSelection.png" id="23_mc2jv"]
-[ext_resource type="PackedScene" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
-[ext_resource type="PackedScene" path="res://Selectables/Actions/spell.tscn" id="28_qktwf"]
+[ext_resource type="PackedScene" uid="uid://dv0w86tmw8r7m" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
+[ext_resource type="PackedScene" uid="uid://dwlqhh6ykawyd" path="res://Selectables/spell.tscn" id="28_qktwf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -325,7 +325,7 @@ texture_disabled = ExtResource("13_k83mh")
 custom_minimum_size = Vector2(44, 42)
 layout_mode = 2
 
-[node name="TextureButton" type="TextureButton" parent="UI/UI/GameTools/Panel2"]
+[node name="CancelSelection-Button" type="TextureButton" parent="UI/UI/GameTools/Panel2"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -504,6 +504,7 @@ position = Vector2(29, -10)
 [node name="BottomRightMostSpawnPoint2" type="Marker2D" parent="EnemySpawner"]
 position = Vector2(942, 806)
 
+[connection signal="pressed" from="UI/UI/GameTools/Panel2/CancelSelection-Button" to="." method="_on_cancel_selection_button_pressed"]
 [connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel/WheatSeedBag" to="." method="_on_wheat_seed_bag_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel/WheatSeedBag" to="." method="_on_wheat_seed_bag_stop_holding"]

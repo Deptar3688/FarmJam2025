@@ -8,6 +8,7 @@ var gold : int = 100000:
 		gold = value
 		%GoldLabel.text = str(value)
 
+var mana : int = 100
 
 @onready var tilemap := $TileMaps/Layer0
 @onready var placement_mask_till := $TileMaps/PlacementMaskTill
@@ -18,7 +19,9 @@ var gold : int = 100000:
 @onready var CropContainer := $TileMaps/CropContainer
 @onready var wheat_scene = preload("res://Crops/crop_wheat.tscn")
 @onready var tilled_land_scene = preload("res://Selectables/Actions/tilled_land.tscn")
-@onready var pitchfork_target_scene = preload("res://Selectables/Actions/pitchfork_attack.tscn")
+@onready var pitchfork_target_scene = preload("res://Selectables/Actions/attack_target.tscn")
+@onready var pitchfork_spell_scene = preload("res://Selectables/Actions/pitchfork_spell.tscn")
+
 # placement indicators
 @onready var HoldingContainer := $UI/HoldingContainer
 var holding : Node2D
@@ -60,12 +63,31 @@ func _process(delta):
 		if Input.is_action_just_pressed("click") and held_tile == pitchfork_target_scene:
 			if get_global_mouse_position() > $UI/UI.global_position:
 				print("invalid placement")
-			
+			else:
+				for i in range(3):
+					await get_tree().create_timer(0.04).timeout
+					_cast_spell(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
 			print("invalid placement")
-		
+
+# spellcast
+func _cast_spell(location : Vector2i):
+	var tile_size = tilemap.tile_set.tile_size
+	
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	
+	var offset = Vector2i(
+		rng.randf_range(-tile_size.x, tile_size.x),
+		rng.randf_range(-tile_size.y, tile_size.y)
+	)
+	var random_position_on_tile = location + offset
+	var spell = pitchfork_spell_scene.instantiate()
+	spell.global_position = random_position_on_tile
+	entity_container.add_child(spell)
+
 # Navigation
 func _update_walkable_tiles():
 	for x in astar.region.size.x:
@@ -222,8 +244,8 @@ func _on_spell_stop_holding():
 	
 # Switch holding
 func _on_grid_container_switch_holding(object):
-	_switch_holding(object.holding_icon)
-func _switch_holding(object):
+	_switch_holding()
+func _switch_holding():
 	placement_mask_current.visible = false
 	_stop_holding()
 
@@ -235,3 +257,9 @@ func show_tooltip(selectable_name: String, description: String, cost: String):
 
 func hide_tooltip():
 	%ToolTipContainer.visible = false
+
+func _on_cancel_selection_button_pressed():
+	_stop_holding()
+	$UI/UI/GridContainer._on_stop_holding()
+	for panel in $UI/UI/GridContainer.get_children():
+		panel.get_child(0).deselect()
