@@ -25,7 +25,6 @@ var wave : int = 1:
 	set(value):
 		wave = value
 		%WaveLabel.text = "Wave: " + str(value)
-var enemy_num := 0
 var spawn_speed
 
 @onready var night_filter := $UI/NightFilter
@@ -92,8 +91,7 @@ func _process(delta):
 		wave_bar.value = 30
 	else:
 		wave_bar.value = wave_timer.time_left
-		if $EnemySpawner/EnemySpawnTimer.is_stopped() and enemy_num <= 0:
-			enemy_num = 0
+		if $EnemySpawner/EnemySpawnTimer.is_stopped() and get_tree().get_node_count_in_group("Enemy") <= 0:
 			wave += 1
 			is_in_wave = false
 			for entity in CropContainer.get_children():
@@ -164,7 +162,6 @@ func _update_walkable_tiles():
 	astar.update()
 
 func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
-	enemy_num += 1
 	var enemy = preload("res://Entities/witch_enemy.tscn").instantiate()
 	enemy.position = tilemap.to_global(tilemap.map_to_local(tile_pos))
 	enemy.set_astar_data(astar, tilemap)
