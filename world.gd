@@ -17,7 +17,7 @@ var health : int = MAX_HEALTH:
 		
 var mana : int = MAX_MANA:
 	set(value):
-		mana = value
+		mana = clampi(value, 0, MAX_MANA)
 		%ManaLabel.text = str(value)
 
 var is_in_wave := false
