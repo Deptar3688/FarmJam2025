@@ -21,6 +21,7 @@ var is_attacking : bool
 @onready var fireball_scene := preload("res://Entities/fireball.tscn")
 @onready var fireball_container := $EntityContainer 
 
+
 func _ready():
 	target = original_target
 	path = generate_path_to_target(target)
@@ -98,6 +99,7 @@ func _on_attack_range_area_entered(area):
 		attack_cooldown.start()
 
 func _on_attack_speed_timeout():
+	_play_sfx_fire()
 	var fireball2 = fireball_scene.instantiate()
 	fireball2.target_position = to_local(target.global_position)
 	fireball2.position = sprite.position + direction.normalized() * 5
@@ -105,6 +107,7 @@ func _on_attack_speed_timeout():
 	fireball_container.add_child(fireball2)
 
 func take_damage(damage: int):
+	_play_sfx_hurt()
 	_hp -= damage
 	
 	shake_sprite()
@@ -115,6 +118,9 @@ func take_damage(damage: int):
 	
 	if _hp <= 0:
 		World.instance.enemy_num -= 1
+		_play_sfx_death()
+		visible = false
+		await get_tree().create_timer(0.8).timeout
 		queue_free()
 	
 func shake_sprite(intensity := 1.5, duration := 0.2, shakes := 3):
@@ -125,3 +131,31 @@ func shake_sprite(intensity := 1.5, duration := 0.2, shakes := 3):
 		var offset = Vector2(randf_range(-intensity, intensity), 0)
 		tween.tween_property(sprite, "position", original_position + offset, duration / (shakes * 2))
 		tween.tween_property(sprite, "position", original_position, duration / (shakes * 2))
+
+func play_sound_with_variation(player: AudioStreamPlayer, min_pitch := 0.8, max_pitch := 1.2):
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	player.pitch_scale = rng.randf_range(min_pitch, max_pitch)
+	player.play()
+	player.finished.connect(player.queue_free)
+
+func _play_sfx_fire():
+	var fire_sfx = AudioStreamPlayer.new()
+	fire_sfx.stream = preload("res://Audio/SFX/fireball.mp3")  
+	fire_sfx.volume_db = -10.0
+	add_child(fire_sfx)
+	play_sound_with_variation(fire_sfx)
+
+func _play_sfx_hurt():
+	var hurt_sfx := AudioStreamPlayer.new()
+	hurt_sfx.stream = preload("res://Audio/SFX/retro-hurt-1-236672.mp3")  
+	hurt_sfx.volume_db = 5.0
+	add_child(hurt_sfx)
+	play_sound_with_variation(hurt_sfx)
+
+func _play_sfx_death():
+	var hurt_sfx := AudioStreamPlayer.new()
+	hurt_sfx.stream = preload("res://Audio/SFX/8-bit-explosion-3-340456.mp3")  
+	hurt_sfx.volume_db = 5.0
+	add_child(hurt_sfx)
+	play_sound_with_variation(hurt_sfx)

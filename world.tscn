@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=46 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
@@ -31,6 +31,13 @@
 [ext_resource type="Texture2D" uid="uid://b67pn24mm5ro7" path="res://Assets/UI/CancelSelection.png" id="23_mc2jv"]
 [ext_resource type="PackedScene" uid="uid://dv0w86tmw8r7m" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
 [ext_resource type="PackedScene" uid="uid://dwlqhh6ykawyd" path="res://Selectables/Actions/spell.tscn" id="28_qktwf"]
+[ext_resource type="AudioStream" uid="uid://3vq6ampquvea" path="res://Audio/BGM/Day1.mp3" id="32_6ah6f"]
+[ext_resource type="AudioStream" uid="uid://cm1w1qj3ds2x8" path="res://Audio/SFX/retro-click-236673.mp3" id="32_g1i3r"]
+[ext_resource type="AudioStream" uid="uid://de7k44cpwgmqo" path="res://Audio/BGM/Day2.mp3" id="32_jjr1n"]
+[ext_resource type="AudioStream" uid="uid://cpgdljmoj4le6" path="res://Audio/SFX/impact-sound-effect-8-bit-retro-151796.mp3" id="33_my276"]
+[ext_resource type="AudioStream" uid="uid://b2hdxq2kyjhmo" path="res://Audio/BGM/Night1.mp3" id="34_g1i3r"]
+[ext_resource type="AudioStream" uid="uid://dp4pi5j6tjt3i" path="res://Audio/SFX/retro-coin-1-236677.mp3" id="34_yx0jh"]
+[ext_resource type="AudioStream" uid="uid://brb55s7xe05a0" path="res://Audio/BGM/Night2.mp3" id="35_my276"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -353,6 +360,7 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+tooltip_text = "Next Wave"
 texture_normal = ExtResource("12_o3ebs")
 texture_pressed = ExtResource("13_k83mh")
 texture_hover = ExtResource("14_qktwf")
@@ -366,6 +374,7 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+tooltip_text = "Cancel Selection"
 texture_normal = ExtResource("23_mc2jv")
 texture_pressed = ExtResource("16_bh8nc")
 texture_hover = ExtResource("17_jjr1n")
@@ -484,55 +493,105 @@ collision_layer = 4
 
 [node name="HoldingContainer" type="Node2D" parent="UI"]
 
-[node name="ToolTipContainer" type="Control" parent="UI"]
-unique_name_in_owner = true
-layout_mode = 3
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -108.0
-offset_right = 565.0
+offset_top = -203.0
+offset_right = 960.0
 grow_vertical = 0
+theme_override_constants/separation = 23
+alignment = 2
 
-[node name="ColorRect" type="ColorRect" parent="UI/ToolTipContainer"]
-layout_mode = 0
+[node name="ToolTipContainer" type="Control" parent="UI/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(940, 90)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/VBoxContainer/ToolTipContainer"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = -7.0
+offset_top = -100.0
 offset_right = 950.0
-offset_bottom = 83.0
+offset_bottom = -10.0
+grow_vertical = 0
 color = Color(0.0823529, 0.0823529, 0.0823529, 0.733333)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/ToolTipContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/ToolTipContainer/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 12.0
-offset_top = -3.0
-offset_right = 367.0
-offset_bottom = -3.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/ToolTipContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/VBoxContainer/ToolTipContainer/ColorRect/MarginContainer"]
 layout_mode = 2
 
-[node name="SelectableNameLabel" type="Label" parent="UI/ToolTipContainer/MarginContainer/VBoxContainer"]
+[node name="SelectableNameLabel" type="Label" parent="UI/VBoxContainer/ToolTipContainer/ColorRect/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Name"
 
-[node name="SelectableDescriptionLabel" type="Label" parent="UI/ToolTipContainer/MarginContainer/VBoxContainer"]
+[node name="SelectableDescriptionLabel" type="Label" parent="UI/VBoxContainer/ToolTipContainer/ColorRect/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Description"
 
-[node name="SelectableCostLabel" type="Label" parent="UI/ToolTipContainer/MarginContainer/VBoxContainer"]
+[node name="SelectableCostLabel" type="Label" parent="UI/VBoxContainer/ToolTipContainer/ColorRect/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "999g"
+
+[node name="ToolTip2" type="Control" parent="UI/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(940, 90)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/VBoxContainer/ToolTip2"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -100.0
+offset_right = 950.0
+offset_bottom = -10.0
+grow_vertical = 0
+color = Color(0.0823529, 0.0823529, 0.0823529, 0.733333)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/ToolTip2/ColorRect"]
+custom_minimum_size = Vector2(940, 90)
+layout_mode = 1
+offset_right = 960.0
+offset_bottom = 92.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 2
+
+[node name="TT2Label" type="Label" parent="UI/VBoxContainer/ToolTip2/ColorRect/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(900, 90)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Description
+"
+autowrap_mode = 3
+
+[node name="BlackFade" type="ColorRect" parent="UI"]
+visible = false
+offset_left = -32.0
+offset_top = -26.0
+offset_right = 1376.0
+offset_bottom = 844.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point")]
 script = ExtResource("21_bc84e")
@@ -560,6 +619,39 @@ autostart = true
 wait_time = 30.0
 one_shot = true
 
+[node name="SFX" type="Node" parent="."]
+
+[node name="PlaceTileSFX" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("32_g1i3r")
+
+[node name="InvalidSFX" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("33_my276")
+
+[node name="CoinSFX" type="AudioStreamPlayer" parent="SFX"]
+unique_name_in_owner = true
+stream = ExtResource("34_yx0jh")
+
+[node name="BGM" type="Node" parent="."]
+
+[node name="BGMDay1" type="AudioStreamPlayer" parent="BGM"]
+unique_name_in_owner = true
+stream = ExtResource("32_6ah6f")
+
+[node name="BGMDay2" type="AudioStreamPlayer" parent="BGM"]
+unique_name_in_owner = true
+stream = ExtResource("32_jjr1n")
+
+[node name="BGMNight1" type="AudioStreamPlayer" parent="BGM"]
+unique_name_in_owner = true
+stream = ExtResource("34_g1i3r")
+
+[node name="BGMNight2" type="AudioStreamPlayer" parent="BGM"]
+unique_name_in_owner = true
+stream = ExtResource("35_my276")
+
+[connection signal="game_over" from="EntityContainer/Tower" to="." method="_on_tower_game_over"]
 [connection signal="pressed" from="UI/UI/GameTools/Panel/Start-Pause-Button" to="." method="_on_start_pause_button_pressed"]
 [connection signal="pressed" from="UI/UI/GameTools/Panel2/CancelSelection-Button" to="." method="_on_cancel_selection_button_pressed"]
 [connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]

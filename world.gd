@@ -3,7 +3,7 @@ extends Node2D
 
 static var instance: World
 
-var gold : int = 100000:
+var gold : int = 1000:
 	set(value):
 		gold = value
 		%GoldLabel.text = str(value)
@@ -32,7 +32,6 @@ var spawn_speed
 @onready var wave_timer := $WaveTimer 
 @onready var wave_bar := %WaveBar
 
-
 @onready var tilemap := $TileMaps/Layer0
 @onready var placement_mask_till := $TileMaps/PlacementMaskTill
 @onready var placement_mask_crops := $TileMaps/PlacementMaskCrops 
@@ -54,8 +53,14 @@ var held_tile : PackedScene
 var astar := AStarGrid2D.new()
 @onready var tower := $EntityContainer/Tower
 
+# game over
+@onready var next_scene : PackedScene
+
+var current_track
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	instance = self
 	%ToolTipContainer.visible = false
 	gold = gold
@@ -76,9 +81,14 @@ func _ready():
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # disable diagonal movement
 	astar.update()
 	_update_walkable_tiles()
+	
+	$UI/BlackFade.visible = true
+	var tween := create_tween()
+	tween.tween_property($UI/BlackFade, "modulate", Color.TRANSPARENT, 1)
+	current_track = [%BGMNight1, %BGMNight2].pick_random()
+	fade_in_music(current_track)
 
 func _process(delta):
-	
 	## FOR SOME REASON SELECTABLES STAY HOVERED IF YOU MOVE A CURSOR OVER THEM AT A CERTAIN SPEED
 	if get_global_mouse_position().x < $UI/UI.global_position.x:
 		for panel in $UI/UI/GridContainer.get_children():
@@ -90,12 +100,17 @@ func _process(delta):
 		mana = 100
 		if !night_filter.visible: night_filter.visible = true
 		wave_bar.value = 30
+		%ToolTip2.visible = true
+		%TT2Label.text = _set_label()
 	else:
 		wave_bar.value = wave_timer.time_left
 		if $EnemySpawner/EnemySpawnTimer.is_stopped() and enemy_num <= 0:
+			var next_track = [%BGMNight1, %BGMNight2].pick_random()
+			_switch_tracks(current_track, next_track)
 			enemy_num = 0
 			wave += 1
 			is_in_wave = false
+			%ToolTip2.visible = false
 			for entity in CropContainer.get_children():
 				if entity is Crop:
 					entity.harvest()
@@ -106,7 +121,7 @@ func _process(delta):
 		
 		if Input.is_action_just_pressed("click") and held_tile == pitchfork_target_scene:
 			if get_global_mouse_position() > $UI/UI.global_position:
-				print("invalid placement")
+				%InvalidSFX.play()
 			else:
 				if mana >= 5:
 					mana -= 5
@@ -114,20 +129,55 @@ func _process(delta):
 						await get_tree().create_timer(0.04).timeout
 						_cast_spell(holding.position)
 		elif Input.is_action_just_pressed("click") and held_tile == scythe_target_scene:
-			_harvest_crop(holding.position)
+			if !is_in_wave:
+				%InvalidSFX.play()
+			else:
+				_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
-			_place_tile()
+			if holding is Crop:
+				if holding.gold_cost <= gold:
+					_place_tile()
+				else:
+					%InvalidSFX.play()
+			else:
+				_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
-			print("invalid placement")
-	
+			%InvalidSFX.play()
+
+func _set_label():
+	match wave:
+		1:
+			return Globals.tt1
+		2:
+			return Globals.tt2
+		3:
+			return Globals.tt3
+		4:
+			return Globals.tt4
+		5:
+			return Globals.tt5
+		6:
+			return Globals.tt6
+		7:
+			return Globals.tt7
+		8:
+			return Globals.tt8
+		9:
+			return Globals.tt9
+		10:
+			return Globals.tt10
+
 # harvest
 func _harvest_crop(target_position:Vector2):
 	for crop in CropContainer.get_children():
 		if crop is Crop:
 			var tile_coords = tilemap.local_to_map(crop.global_position)
 			if crop.position == target_position and mana >= 5:
+				play_sound_with_variation(%CoinSFX)
 				crop.harvest()
-	pass
+			else:
+				%InvalidSFX.play()
+
 
 # spellcast
 func _cast_spell(location : Vector2i):
@@ -174,6 +224,7 @@ func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
 
 
 func _place_tile():
+	play_sound_with_variation(%PlaceTileSFX)
 	var new_crop = held_tile.instantiate()
 	var tile_pos = _mouse_to_tileset_position()
 
@@ -325,12 +376,21 @@ func _on_cancel_selection_button_pressed():
 			panel.get_child(0).deselect()
 
 func _on_start_pause_button_pressed():
+	if holding:
+		_stop_holding()
+		$UI/UI/GridContainer._on_stop_holding()
+		for panel in $UI/UI/GridContainer.get_children():
+			panel.get_child(0).deselect()
+	var next_track = [%BGMDay1, %BGMDay2].pick_random()
+	_switch_tracks(current_track, next_track)
 	if night_filter.visible: night_filter.visible = false
 	is_in_wave = true
+	%ToolTip2.visible = false
 	if wave <= 10:
 		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
 	else:
-		spawn_speed = $EnemySpawner.spawn_speed[9]
+		spawn_speed = $EnemySpawner.spawn_speed[9]/wave * 2
+	
 	$EnemySpawner/EnemySpawnTimer.start(spawn_speed)
 	if wave_timer.is_stopped():
 		wave_timer.start()
@@ -341,4 +401,33 @@ func _on_mana_regen_timeout():
 
 func _on_wave_timer_timeout():
 	$EnemySpawner/EnemySpawnTimer.stop()
+
+func _on_tower_game_over():
+	Globals.wave_num = wave
+	var tween = create_tween()
+	tween.tween_property($UI/BlackFade, "modulate", Color.BLACK, 1)
+	await get_tree().create_timer(1.5).timeout
+	get_tree().change_scene_to_file("res://game_over.tscn")
+
+func _switch_tracks(track1 : AudioStreamPlayer, track2 : AudioStreamPlayer):
+	fade_out_music(track1)
+	fade_in_music(track2)
+	current_track = track2
 	
+
+func fade_out_music(player: AudioStreamPlayer, duration := 2.0):
+	var tween := create_tween()
+	tween.tween_property(player, "volume_db", -80.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_callback(Callable(player, "stop"))
+
+func fade_in_music(player: AudioStreamPlayer, duration := 2.0):
+	player.volume_db = -80.0
+	player.play()
+	var tween := create_tween()
+	tween.tween_property(player, "volume_db", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func play_sound_with_variation(player: AudioStreamPlayer, min_pitch := 0.8, max_pitch := 1.2):
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	player.pitch_scale = rng.randf_range(min_pitch, max_pitch)
+	player.play()

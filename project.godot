@@ -11,15 +11,20 @@ config_version=5
 [application]
 
 config/name="FarmJam2025"
-run/main_scene="res://world.tscn"
+run/main_scene="uid://b7vktvyi0wg6g"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Globals="*res://Globals.gd"
 
 [display]
 
 window/size/viewport_width=1344
 window/size/viewport_height=816
 window/size/resizable=false
+window/stretch/mode="canvas_items"
 
 [global_group]
 
