@@ -17,18 +17,29 @@ var health : int = MAX_HEALTH:
 		
 var mana : int = MAX_MANA:
 	set(value):
-		mana = value
-		%ManaLabel.text = str(value)
+		mana = clampi(value, 0, MAX_MANA)
+		%ManaLabel.text = str(mana)
 
 var is_in_wave := false
 var wave : int = 1:
 	set(value):
 		wave = value
 		%WaveLabel.text = "Wave: " + str(value)
-var enemy_num := 0
 var spawn_speed
 
-@onready var night_filter := $UI/NightFilter
+@onready var night_filter := %NightFilter
+# var _night_filter_tween: Tween
+var is_night: bool = true:
+	set(value):
+		if value != is_night:
+			if value == true:
+				night_filter.visible = true
+				create_tween().tween_property(night_filter, "color:a", 0.8, 0.5)\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			else:
+				create_tween().tween_property(night_filter, "color:a", 0.0, 0.5)\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+			is_night = value
 @onready var wave_timer := $WaveTimer 
 @onready var wave_bar := %WaveBar
 
@@ -96,24 +107,28 @@ func _process(delta):
 			panel.get_child(0)._update_visual()
 	##
 	
-	if !is_in_wave :
-		mana = 100
-		if !night_filter.visible: night_filter.visible = true
+	if !is_in_wave:
+		mana = MAX_MANA
 		wave_bar.value = 30
-		%ToolTip2.visible = true
+		
+		if wave <= 10:
+			%ToolTip2.visible = true
 		%TT2Label.text = _set_label()
 	else:
 		wave_bar.value = wave_timer.time_left
-		if $EnemySpawner/EnemySpawnTimer.is_stopped() and enemy_num <= 0:
+		if $EnemySpawner/EnemySpawnTimer.is_stopped() and get_tree().get_node_count_in_group("Enemy") <= 0:
 			var next_track = [%BGMNight1, %BGMNight2].pick_random()
 			_switch_tracks(current_track, next_track)
-			enemy_num = 0
 			wave += 1
 			is_in_wave = false
 			%ToolTip2.visible = false
+			is_night = true
 			for entity in CropContainer.get_children():
 				if entity is Crop:
 					entity.harvest()
+				elif entity is TilledLand:
+					_reset_tile(tilemap.local_to_map(entity.position / 2))
+					entity.queue_free()
 				else:
 					entity.queue_free()
 	if holding:
@@ -132,7 +147,11 @@ func _process(delta):
 			if !is_in_wave:
 				%InvalidSFX.play()
 			else:
-				_harvest_crop(holding.position)
+				for entity in CropContainer.get_children():
+					# Remove the tilled land at the scythe position
+					if entity is TilledLand and tilemap.local_to_map(entity.position) == tilemap.local_to_map(holding.position):
+						entity.queue_free()
+					_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			if holding is Crop:
 				if holding.gold_cost <= gold:
@@ -166,6 +185,8 @@ func _set_label():
 			return Globals.tt9
 		10:
 			return Globals.tt10
+		_: 
+			return ""
 
 # harvest
 func _harvest_crop(target_position:Vector2):
@@ -214,7 +235,6 @@ func _update_walkable_tiles():
 	astar.update()
 
 func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
-	enemy_num += 1
 	var enemy = preload("res://Entities/witch_enemy.tscn").instantiate()
 	enemy.position = tilemap.to_global(tilemap.map_to_local(tile_pos))
 	enemy.set_astar_data(astar, tilemap)
@@ -236,7 +256,10 @@ func _place_tile():
 	new_crop.position = tile_pos
 	CropContainer.add_child(new_crop)
 	if new_crop is Crop:
+		# Make the tile plantable again if the crop has died from enemies
 		new_crop.has_died.connect(_reenable_tile.bind(tile_coords), CONNECT_ONE_SHOT)
+		# Reset the tile the crop is on if its being harvested
+		new_crop.has_been_harvested.connect(_reset_tile.bind(tile_coords), CONNECT_ONE_SHOT)
 	
 	if held_tile != tilled_land_scene:
 		new_crop._start_growing()
@@ -247,8 +270,11 @@ func _place_tile():
 		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 func _reenable_tile(tile_coords: Vector2i):
-	#print(tile_coords)
 	placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
+
+func _reset_tile(tile_coords: Vector2i):
+	placement_mask_till.set_cell(tile_coords, 0, Vector2i(0,1))
+	placement_mask_crops.set_cell(tile_coords, 1, Vector2i(0,1))
 
 # checks PlacementMask to see if area is valid
 func is_tile_placeable(tile_pos: Vector2i):
@@ -383,7 +409,8 @@ func _on_start_pause_button_pressed():
 			panel.get_child(0).deselect()
 	var next_track = [%BGMDay1, %BGMDay2].pick_random()
 	_switch_tracks(current_track, next_track)
-	if night_filter.visible: night_filter.visible = false
+	
+	is_night = false
 	is_in_wave = true
 	%ToolTip2.visible = false
 	if wave <= 10:

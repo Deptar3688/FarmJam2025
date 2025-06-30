@@ -117,11 +117,11 @@ func take_damage(damage: int):
 	tween.tween_property(sprite, "modulate", Color(1, 1, 1), 0.1)
 	
 	if _hp <= 0:
-		World.instance.enemy_num -= 1
 		_play_sfx_death()
 		visible = false
 		await get_tree().create_timer(0.8).timeout
 		queue_free()
+
 	
 func shake_sprite(intensity := 1.5, duration := 0.2, shakes := 3):
 	var tween := create_tween()

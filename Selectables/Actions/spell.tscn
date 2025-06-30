@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwlqhh6ykawyd"]
+[gd_scene load_steps=6 format=3 uid="uid://7i40qt7mp2o8"]
 
 [ext_resource type="Script" uid="uid://d2rsvw8ax1sbc" path="res://Selectables/selectable.gd" id="1_fdnvo"]
 [ext_resource type="PackedScene" uid="uid://mdpfje57e73q" path="res://Selectables/Actions/attack_target.tscn" id="2_fdnvo"]

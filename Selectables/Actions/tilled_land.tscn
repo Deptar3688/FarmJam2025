@@ -1,11 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://liegltq4j4bx"]
+[gd_scene load_steps=3 format=3 uid="uid://liegltq4j4bx"]
 
 [ext_resource type="Texture2D" uid="uid://cbi8tu1wm7oql" path="res://Assets/BG/TilledLand.png" id="1_5hd0k"]
+[ext_resource type="Script" uid="uid://d1hnnahc8owuf" path="res://Selectables/Actions/TilledLand.gd" id="1_f030f"]
 
 [node name="TilledLand" type="Node2D"]
 light_mask = 2
 visibility_layer = 2
 scale = Vector2(2, 2)
+script = ExtResource("1_f030f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)

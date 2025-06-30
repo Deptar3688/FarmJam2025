@@ -23,6 +23,7 @@ var current_stage
 @export var attack_range: int
 
 signal has_died()
+signal has_been_harvested()
 
 func _ready():
 	current_state = State.PLACING
@@ -58,5 +59,5 @@ func harvest():
 	if current_state == State.MATURE:
 		World.instance.gold += gold_value
 		World.instance.mana -= 5
-		has_died.emit()
+		has_been_harvested.emit()
 		queue_free()
