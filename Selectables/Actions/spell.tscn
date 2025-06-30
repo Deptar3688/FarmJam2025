@@ -13,6 +13,7 @@ script = ExtResource("1_fdnvo")
 holding_icon = ExtResource("2_fdnvo")
 selectable_name = "Rain of Pitchforks"
 description = "Summons magical pitchforks from the sky to pierce enemies! "
+mana_cost = 10
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = ExtResource("3_se36j")

@@ -8,7 +8,7 @@ func _ready() -> void:
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 
 func _on_shoot_timer_timeout():
-	if current_state == State.MATURE:
+	if current_state == State.MATURE and World.instance.enemy_num>0:
 		var pumpkin_projectile: Projectile = pumpkin_projectile_tscn.instantiate()
 		pumpkin_projectile.position = position
 		var closest_enemy: Enemy = get_closest_enemy()

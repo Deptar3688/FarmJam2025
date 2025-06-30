@@ -8,7 +8,7 @@ extends Node2D
 @export var top_left_point: Marker2D
 @export var bottom_right_point: Marker2D
 
-var day_1_spawns: Array[int] = [1, 1, 1, 1, ]
+var spawn_speed: Array[int] = [2, 1.7, 1.5, 1.2, 1, 0.7, 0.5, 0.4, 0.3, 0.2]
 
 func _ready() -> void:
 	enemy_spawn_timer.timeout.connect(_on_enemy_spawn_timer_timeout)

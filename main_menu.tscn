@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://b7vktvyi0wg6g"]
+[gd_scene load_steps=4 format=3 uid="uid://b7vktvyi0wg6g"]
 
 [ext_resource type="Script" uid="uid://cyp5kgqdkpyat" path="res://main_menu.gd" id="1_06t4h"]
+[ext_resource type="Texture2D" uid="uid://cma4dmdqfwdjw" path="res://Assets/TitleScreen/BG.png" id="2_7vrkn"]
+[ext_resource type="Texture2D" uid="uid://ci4vk2ddrgv5s" path="res://Assets/TitleScreen/witches.png" id="3_fu7sn"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,10 +13,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_06t4h")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 224.0
+offset_bottom = 136.0
+scale = Vector2(6, 6)
+texture = ExtResource("2_7vrkn")
+
+[node name="Witches" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+scale = Vector2(6, 6)
+texture = ExtResource("3_fu7sn")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -23,10 +34,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -289.5
-offset_top = -8.0
-offset_right = 289.5
-offset_bottom = 312.0
+offset_left = -285.0
+offset_top = 44.0
+offset_right = 294.0
+offset_bottom = 364.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(50, 30)
@@ -37,24 +48,17 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 100
 text = "Play"
 
-[node name="HowToPlayButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 100
-text = "How to Play"
-
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -359.5
-offset_right = 359.5
-offset_bottom = 137.0
-grow_horizontal = 2
+offset_left = 323.0
+offset_top = 247.0
+offset_right = 1042.0
+offset_bottom = 384.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 35
 theme_override_font_sizes/normal_font_size = 100
 text = "Harvest Magus"
 fit_content = true
 autowrap_mode = 0
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]

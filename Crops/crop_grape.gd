@@ -8,7 +8,7 @@ func _ready() -> void:
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 
 func _on_shoot_timer_timeout():
-	if current_state == State.MATURE:
+	if current_state == State.MATURE and World.instance.enemy_num>0:
 		for i in range(5):
 			var grape_projectile: Projectile = grape_projectile_tscn.instantiate()
 			grape_projectile.position = position

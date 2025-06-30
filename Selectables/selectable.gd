@@ -14,6 +14,8 @@ signal holding(object: PackedScene)
 signal stop_holding
 signal selected_self(selectable: Selectable)
 
+@export var mana_cost : int
+
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -48,12 +50,19 @@ func _on_mouse_exited():
 	
 func _on_mouse_entered():
 	var cost: String = ""
+	var value: String = ""
+	var cost_string: String = ""
 	var temp_obj = holding_icon.instantiate()
 		# If it's a crop, check if the player has enough money.
 		# Right now, do nothing if they don't have enough money
 	if temp_obj is Crop:
 		cost = "%sg" % temp_obj.gold_cost
-	World.instance.show_tooltip(selectable_name, description, cost)
+		value = "%sg" % temp_obj.gold_value
+		cost_string = "Buy: " + cost + " | Sell: " + value
+	else:
+		if mana_cost != 0:
+			cost_string = "Mana Cost: " + str(mana_cost)
+	World.instance.show_tooltip(selectable_name, description, cost_string)
 
 	is_currently_hovered = true
 	

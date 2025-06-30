@@ -14,6 +14,6 @@ func tween_to_position(target_node: Node2D, new_position: Vector2, duration := 0
 	tween.tween_property(target_node, "position", new_position, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await get_tree().create_timer(0.5).timeout
 	if is_instance_valid(node_to_damage):
-		if node_to_damage is Crop:
+		if node_to_damage is Crop or node_to_damage is Tower:
 			node_to_damage.take_damage(1)
 	queue_free()

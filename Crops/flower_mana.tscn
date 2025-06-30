@@ -29,6 +29,7 @@ one_shot = true
 polygon = PackedVector2Array(16, 0, 0, -8, -16, 0, 0, 8)
 
 [node name="ShootTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 3.0
+autostart = true
 
 [connection signal="timeout" from="GrowingTimer" to="." method="_on_growing_timer_timeout"]

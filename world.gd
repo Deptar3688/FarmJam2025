@@ -10,8 +10,28 @@ var gold : int = 100000:
 
 const MAX_HEALTH : int = 100
 const MAX_MANA : int = 100
-var health := MAX_HEALTH
-var mana := MAX_MANA
+var health : int = MAX_HEALTH:
+	set(value):
+		health = value
+		%HealthLabel.text = str(value)
+		
+var mana : int = MAX_MANA:
+	set(value):
+		mana = value
+		%ManaLabel.text = str(value)
+
+var is_in_wave := false
+var wave : int = 1:
+	set(value):
+		wave = value
+		%WaveLabel.text = "Wave: " + str(value)
+var enemy_num := 0
+var spawn_speed
+
+@onready var night_filter := $UI/NightFilter
+@onready var wave_timer := $WaveTimer 
+@onready var wave_bar := %WaveBar
+
 
 @onready var tilemap := $TileMaps/Layer0
 @onready var placement_mask_till := $TileMaps/PlacementMaskTill
@@ -20,7 +40,6 @@ var mana := MAX_MANA
 
 # crops
 @onready var CropContainer := $TileMaps/CropContainer
-@onready var wheat_scene = preload("res://Crops/crop_wheat.tscn")
 @onready var tilled_land_scene = preload("res://Selectables/Actions/tilled_land.tscn")
 @onready var pitchfork_target_scene = preload("res://Selectables/Actions/attack_target.tscn")
 @onready var pitchfork_spell_scene = preload("res://Selectables/Actions/pitchfork_spell.tscn")
@@ -40,6 +59,9 @@ func _ready():
 	instance = self
 	%ToolTipContainer.visible = false
 	gold = gold
+	health = health
+	mana = mana
+	wave = wave
 	#var TL_tile = Vector2i(-1,0)
 	#var BL_tile = Vector2i(25,26)
 	#var TR_tile = Vector2i(14,-15)
@@ -56,6 +78,29 @@ func _ready():
 	_update_walkable_tiles()
 
 func _process(delta):
+	
+	## FOR SOME REASON SELECTABLES STAY HOVERED IF YOU MOVE A CURSOR OVER THEM AT A CERTAIN SPEED
+	if get_global_mouse_position().x < $UI/UI.global_position.x:
+		for panel in $UI/UI/GridContainer.get_children():
+			panel.get_child(0).is_currently_hovered = false
+			panel.get_child(0)._update_visual()
+	##
+	
+	if !is_in_wave :
+		mana = 100
+		if !night_filter.visible: night_filter.visible = true
+		wave_bar.value = 30
+	else:
+		wave_bar.value = wave_timer.time_left
+		if $EnemySpawner/EnemySpawnTimer.is_stopped() and enemy_num <= 0:
+			enemy_num = 0
+			wave += 1
+			is_in_wave = false
+			for entity in CropContainer.get_children():
+				if entity is Crop:
+					entity.harvest()
+				else:
+					entity.queue_free()
 	if holding:
 		holding.position = _mouse_to_tileset_position()
 		
@@ -63,22 +108,24 @@ func _process(delta):
 			if get_global_mouse_position() > $UI/UI.global_position:
 				print("invalid placement")
 			else:
-				for i in range(3):
-					await get_tree().create_timer(0.04).timeout
-					_cast_spell(holding.position)
+				if mana >= 5:
+					mana -= 5
+					for i in range(3):
+						await get_tree().create_timer(0.04).timeout
+						_cast_spell(holding.position)
 		elif Input.is_action_just_pressed("click") and held_tile == scythe_target_scene:
 			_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			_place_tile()
 		elif Input.is_action_just_pressed("click") and !is_tile_placeable(holding.position):
 			print("invalid placement")
-
+	
 # harvest
 func _harvest_crop(target_position:Vector2):
 	for crop in CropContainer.get_children():
 		if crop is Crop:
 			var tile_coords = tilemap.local_to_map(crop.global_position)
-			if crop.position == target_position:
+			if crop.position == target_position and mana >= 5:
 				crop.harvest()
 	pass
 
@@ -117,6 +164,7 @@ func _update_walkable_tiles():
 	astar.update()
 
 func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
+	enemy_num += 1
 	var enemy = preload("res://Entities/witch_enemy.tscn").instantiate()
 	enemy.position = tilemap.to_global(tilemap.map_to_local(tile_pos))
 	enemy.set_astar_data(astar, tilemap)
@@ -142,7 +190,8 @@ func _place_tile():
 	if held_tile != tilled_land_scene:
 		new_crop._start_growing()
 		placement_mask_crops.set_cell(tile_coords, 1, Vector2i(0,1))
-	elif held_tile == tilled_land_scene:
+	elif held_tile == tilled_land_scene and mana >= 5:
+		mana -= 5
 		placement_mask_till.set_cell(tile_coords, 1, Vector2i(0,1))
 		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
@@ -269,7 +318,27 @@ func hide_tooltip():
 	%ToolTipContainer.visible = false
 
 func _on_cancel_selection_button_pressed():
-	_stop_holding()
-	$UI/UI/GridContainer._on_stop_holding()
-	for panel in $UI/UI/GridContainer.get_children():
-		panel.get_child(0).deselect()
+	if holding:
+		_stop_holding()
+		$UI/UI/GridContainer._on_stop_holding()
+		for panel in $UI/UI/GridContainer.get_children():
+			panel.get_child(0).deselect()
+
+func _on_start_pause_button_pressed():
+	if night_filter.visible: night_filter.visible = false
+	is_in_wave = true
+	if wave <= 10:
+		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
+	else:
+		spawn_speed = $EnemySpawner.spawn_speed[9]
+	$EnemySpawner/EnemySpawnTimer.start(spawn_speed)
+	if wave_timer.is_stopped():
+		wave_timer.start()
+	
+func _on_mana_regen_timeout():
+	if mana < MAX_MANA:
+		mana += 1
+
+func _on_wave_timer_timeout():
+	$EnemySpawner/EnemySpawnTimer.stop()
+	

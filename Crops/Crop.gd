@@ -57,4 +57,6 @@ func take_damage(damage: int):
 func harvest():
 	if current_state == State.MATURE:
 		World.instance.gold += gold_value
+		World.instance.mana -= 5
+		has_died.emit()
 		queue_free()

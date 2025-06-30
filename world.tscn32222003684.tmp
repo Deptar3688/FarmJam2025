@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=38 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
@@ -13,7 +13,6 @@
 [ext_resource type="TileSet" uid="uid://dbqy11k5mp6o0" path="res://Selectables/Actions/placementmask.tres" id="7_crrr8"]
 [ext_resource type="PackedScene" uid="uid://dyq4hw7arsi48" path="res://Entities/tower.tscn" id="10_im0vs"]
 [ext_resource type="PackedScene" uid="uid://cbbv2urlky0vk" path="res://Selectables/Actions/hoe.tscn" id="11_v4f2c"]
-[ext_resource type="Texture2D" uid="uid://bc653m8w0ehsd" path="res://Assets/UI/TimerProgress.png" id="12_bh8nc"]
 [ext_resource type="Texture2D" uid="uid://803l2b28ijdg" path="res://Assets/UI/StartPause.png" id="12_o3ebs"]
 [ext_resource type="Texture2D" uid="uid://hc6em1e02mht" path="res://Assets/UI/StartPause-Disabled.png" id="13_k83mh"]
 [ext_resource type="Script" uid="uid://dthwgfd4hon7a" path="res://grid_container.gd" id="13_smjfs"]
@@ -30,7 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://2uj38rklrb8k" path="res://Selectables/Seeds/seed_torch.tscn" id="22_bo7i5"]
 [ext_resource type="Texture2D" uid="uid://b67pn24mm5ro7" path="res://Assets/UI/CancelSelection.png" id="23_mc2jv"]
 [ext_resource type="PackedScene" uid="uid://dv0w86tmw8r7m" path="res://Selectables/Actions/scythe.tscn" id="25_k83mh"]
-[ext_resource type="PackedScene" uid="uid://dwlqhh6ykawyd" path="res://Selectables/Actions/spell.tscn" id="28_qktwf"]
+[ext_resource type="PackedScene" uid="uid://dwlqhh6ykawyd" path="res://Selectables/spell.tscn" id="28_qktwf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a6sd2"]
 texture = ExtResource("2_y7mdh")
@@ -293,7 +292,6 @@ offset_left = 82.0
 offset_top = -2.0
 offset_right = 119.0
 offset_bottom = 21.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="HealthLabel" type="Label" parent="UI/UI/Portrait/StatsAlt"]
 unique_name_in_owner = true
@@ -302,7 +300,6 @@ offset_left = 81.5
 offset_top = 14.5
 offset_right = 118.5
 offset_bottom = 37.5
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 
 [node name="ManaLabel" type="Label" parent="UI/UI/Portrait/StatsAlt"]
 unique_name_in_owner = true
@@ -311,27 +308,6 @@ offset_left = 81.5
 offset_top = 33.0
 offset_right = 118.5
 offset_bottom = 56.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="WaveLabel" type="Label" parent="UI/UI/Portrait/StatsAlt"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = -461.0
-offset_top = -11.0
-offset_right = -401.0
-offset_bottom = 12.0
-text = "Wave: 0"
-
-[node name="WaveBar" type="TextureProgressBar" parent="UI/UI/Portrait/StatsAlt/WaveLabel"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = -35.5
-offset_top = -4.0
-offset_right = 4.5
-offset_bottom = 36.0
-max_value = 30.0
-fill_mode = 5
-texture_progress = ExtResource("12_bh8nc")
 
 [node name="GameTools" type="GridContainer" parent="UI/UI"]
 layout_mode = 1
@@ -507,10 +483,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 12.0
-offset_top = -3.0
-offset_right = 367.0
-offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -544,7 +516,8 @@ top_left_point = NodePath("TopLeftMostSpawnPoint")
 bottom_right_point = NodePath("BottomRightMostSpawnPoint2")
 
 [node name="EnemySpawnTimer" type="Timer" parent="EnemySpawner"]
-wait_time = 0.2
+wait_time = 0.5
+autostart = true
 
 [node name="TopLeftMostSpawnPoint" type="Marker2D" parent="EnemySpawner"]
 position = Vector2(29, -10)
@@ -552,15 +525,6 @@ position = Vector2(29, -10)
 [node name="BottomRightMostSpawnPoint2" type="Marker2D" parent="EnemySpawner"]
 position = Vector2(942, 806)
 
-[node name="ManaRegen" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
-
-[node name="WaveTimer" type="Timer" parent="."]
-wait_time = 30.0
-one_shot = true
-
-[connection signal="pressed" from="UI/UI/GameTools/Panel/Start-Pause-Button" to="." method="_on_start_pause_button_pressed"]
 [connection signal="pressed" from="UI/UI/GameTools/Panel2/CancelSelection-Button" to="." method="_on_cancel_selection_button_pressed"]
 [connection signal="switch_holding" from="UI/UI/GridContainer" to="." method="_on_grid_container_switch_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel/WheatSeedBag" to="." method="_on_wheat_seed_bag_holding"]
@@ -583,5 +547,3 @@ one_shot = true
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel9/Spell" to="." method="_on_spell_stop_holding"]
 [connection signal="holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_stop_holding"]
-[connection signal="timeout" from="ManaRegen" to="." method="_on_mana_regen_timeout"]
-[connection signal="timeout" from="WaveTimer" to="." method="_on_wave_timer_timeout"]
