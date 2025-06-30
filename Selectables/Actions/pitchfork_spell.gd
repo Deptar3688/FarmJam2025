@@ -7,6 +7,9 @@ var has_landed : bool
 @onready var collision := $CollisionShape2D
 
 func _ready():
+	var rng = RandomNumberGenerator.new()
+
+	sprite.frame = rng.randi_range(0,1)
 	end_position = position
 	print(global_position, end_position)
 	collision.visible = false
