@@ -60,20 +60,6 @@ func _ready():
 	target = original_target
 	path = generate_path_to_target(target)
 	path_index = 0
-
-	var current_wave = World.instance.wave
-	if current_wave > 0:
-		var variant_chance = clampf(0.2 + current_wave * 0.02, 0.2, 0.7)
-		if randf() < variant_chance:
-			match randi_range(0, 2):
-				0: # Tanky version
-					enemy_type = EnemyType.TANKY
-				1: # Fast version
-					enemy_type = EnemyType.SPEEDY
-				2: # Ranged version
-					enemy_type = EnemyType.RANGED
-				_:
-					pass
 	
 func set_astar_data(_astar: AStarGrid2D, _tilemaplayer: TileMapLayer):
 	astar = _astar

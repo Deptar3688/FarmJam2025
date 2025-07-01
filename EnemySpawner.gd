@@ -11,6 +11,9 @@ extends Node2D
 
 @export var wave_animation_player: AnimationPlayer
 
+@export var freeplay_spawn_timer: Timer
+@export var freeplay_total_wave_length_timer: Timer
+
 var spawn_speed: Array[int] = [2, 1.7, 1.5, 1.2, 1, 0.7, 0.5, 0.4, 0.3, 0.2]
 
 # func _ready() -> void:
@@ -39,7 +42,8 @@ func start_spawn_wave(wave: int):
 		10:
 			pass
 		_:
-			pass
+			freeplay_total_wave_length_timer.wait_time = 30 + wave * 2
+			
 
 ## Returns the time left, in seconds
 func get_remaining_wave_time():
