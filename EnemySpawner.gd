@@ -28,19 +28,19 @@ func start_spawn_wave(wave: int):
 		3:
 			wave_animation_player.play("wave_3")
 		4:
-			pass
+			wave_animation_player.play("wave_4")
 		5:
 			wave_animation_player.play("wave_5")
 		6:
-			pass
+			wave_animation_player.play("wave_6")
 		7:
 			wave_animation_player.play("wave_7")
 		8:
-			pass
+			wave_animation_player.play("wave_8")
 		9:
 			wave_animation_player.play("wave_9")
 		10:
-			pass
+			wave_animation_player.play("wave_10")
 		_:
 			is_freeplay_enabled = true
 			freeplay_total_wave_length_timer.wait_time = 30 + wave * 2
