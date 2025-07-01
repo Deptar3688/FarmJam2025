@@ -8,12 +8,13 @@ var target : Node2D
 var path : PackedVector2Array
 var path_index := 0
 var speed := 1.0
+var current_speed := 1.0
 var astar: AStarGrid2D
 var direction
 
 var _hp: float = 10
 
-@onready var sprite := $EntityContainer/Sprite2D
+@onready var sprite: Sprite2D = $EntityContainer/Sprite2D
 
 var is_attacking : bool
 @onready var attack_range := $AttackRange
@@ -21,11 +22,57 @@ var is_attacking : bool
 @onready var fireball_scene := preload("res://Entities/fireball.tscn")
 @onready var fireball_container := $EntityContainer 
 
+@export var aggro_range_shape: CollisionShape2D
+@export var attack_range_shape: CollisionShape2D
+@export var attack_speed_timer: Timer
+
+var enemy_type: EnemyType = EnemyType.NORMAL:
+	set(value):
+		match(value):
+			EnemyType.NORMAL:
+				speed = 1
+			EnemyType.TANKY:
+				_hp = 60
+				speed = 0.2
+				sprite.texture = tanky_variant_sprite
+			EnemyType.SPEEDY:
+				_hp = 20
+				speed = 3.0
+				current_speed = speed
+				sprite.texture = speedy_variant_sprite
+				attack_speed_timer.wait_time = 0.3
+			EnemyType.RANGED:
+				aggro_range_shape.shape.radius *= 2
+				attack_range_shape.shape.radius *= 3
+				sprite.texture = ranged_variant_sprite
+				attack_speed_timer.wait_time = 0.5
+				_hp = 30
+				speed = 0.6
+
+enum EnemyType {NORMAL, TANKY, SPEEDY, RANGED}
+
+var tanky_variant_sprite: Texture2D = preload("res://Assets/Entities/TankySpellThief_Witch.png")
+var speedy_variant_sprite: Texture2D = preload("res://Assets/Entities/SpeedySpellThief_Witch.png")
+var ranged_variant_sprite: Texture2D = preload("res://Assets/Entities/RangedSpellThief_Witch.png")
 
 func _ready():
 	target = original_target
 	path = generate_path_to_target(target)
 	path_index = 0
+
+	var current_wave = World.instance.wave
+	if current_wave > 0:
+		var variant_chance = clampf(0.2 + current_wave * 0.02, 0.2, 0.7)
+		if randf() < variant_chance:
+			match randi_range(0, 2):
+				0: # Tanky version
+					enemy_type = EnemyType.TANKY
+				1: # Fast version
+					enemy_type = EnemyType.SPEEDY
+				2: # Ranged version
+					enemy_type = EnemyType.RANGED
+				_:
+					pass
 	
 func set_astar_data(_astar: AStarGrid2D, _tilemaplayer: TileMapLayer):
 	astar = _astar
@@ -41,7 +88,7 @@ func generate_path_to_target(target_local):
 		
 func _physics_process(delta):
 	if target != original_target and !is_instance_valid(target):
-		speed = 1
+		current_speed = speed
 		is_attacking = false
 		attack_cooldown.stop()
 		target = original_target
@@ -65,16 +112,16 @@ func _physics_process(delta):
 		if direction.length() < 2:
 			path_index += 1
 		else:
-			position += direction.normalized() * speed
+			position += direction.normalized() * current_speed
 		
 	if is_attacking:
-		speed = 0
+		current_speed = 0
 		if !is_instance_valid(target):
 			is_attacking = false
 			attack_cooldown.stop()
 			target = original_target
 			path = generate_path_to_target(original_target)
-			speed = 1
+			current_speed = speed
 
 func _on_aggro_range_area_entered(area):
 	if area is Crop: 

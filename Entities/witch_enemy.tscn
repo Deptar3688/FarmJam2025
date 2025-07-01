@@ -7,15 +7,20 @@
 radius = 6.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rac8w"]
-radius = 51.0098
+resource_local_to_scene = true
+radius = 65.0077
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ink4a"]
-radius = 17.0
+resource_local_to_scene = true
+radius = 27.2947
 
-[node name="WitchEnemy" type="CharacterBody2D" groups=["Enemy"]]
+[node name="WitchEnemy" type="CharacterBody2D" node_paths=PackedStringArray("aggro_range_shape", "attack_range_shape", "attack_speed_timer") groups=["Enemy"]]
 y_sort_enabled = true
 collision_layer = 2
 script = ExtResource("1_2m0db")
+aggro_range_shape = NodePath("AggroRange/CollisionShape2D")
+attack_range_shape = NodePath("AttackRange/CollisionShape2D")
+attack_speed_timer = NodePath("AttackSpeed")
 
 [node name="EntityContainer" type="Node2D" parent="."]
 y_sort_enabled = true
