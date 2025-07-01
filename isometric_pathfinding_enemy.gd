@@ -42,6 +42,7 @@ var enemy_type: EnemyType = EnemyType.NORMAL:
 				sprite.texture = speedy_variant_sprite
 				attack_speed_timer.wait_time = 0.3
 			EnemyType.RANGED:
+				aggro_range_shape.shape = aggro_range_shape.shape.duplicate()
 				aggro_range_shape.shape.radius *= 2
 				attack_range_shape.shape.radius *= 3
 				sprite.texture = ranged_variant_sprite

@@ -34,6 +34,8 @@ var _daylight_filter_tween: Tween
 @export var night_time_color: Color
 @export var sunset_time_color: Color 
 
+@export var enemy_spawner: EnemySpawner
+
 # var _night_filter_tween: Tween
 var current_time_of_day: TimeOfDay = TimeOfDay.NIGHT:
 	set(value):
@@ -59,7 +61,6 @@ var current_time_of_day: TimeOfDay = TimeOfDay.NIGHT:
 		
 enum TimeOfDay{DAY, SUNSET, NIGHT}
 
-@onready var wave_timer := $WaveTimer 
 @onready var wave_bar := %WaveBar
 
 @onready var tilemap := $TileMaps/Layer0
@@ -127,17 +128,15 @@ func _process(delta):
 	##
 	
 	if !is_in_wave:
-		mana = MAX_MANA
-		wave_bar.value = 30
-		
+		mana = MAX_MANA		
 		if wave <= 10:
 			%ToolTip2.visible = true
 		%TT2Label.text = _set_label()
 	else:
-		wave_bar.value = wave_timer.time_left
+		wave_bar.value = enemy_spawner.get_remaining_wave_time()
 		if wave_bar.value == 0:
 			current_time_of_day = TimeOfDay.SUNSET
-		if $EnemySpawner/EnemySpawnTimer.is_stopped() and get_tree().get_node_count_in_group("Enemy") <= 0:
+		if !enemy_spawner.is_wave_active() and get_tree().get_node_count_in_group("Enemy") <= 0:
 			var next_track = [%BGMNight1, %BGMNight2].pick_random()
 			_switch_tracks(current_track, next_track)
 			wave += 1
@@ -256,14 +255,14 @@ func _update_walkable_tiles():
 	
 	astar.update()
 
-func spawn_enemy_at(tile_pos: Vector2i, target: Node2D):
+func spawn_enemy_at(tile_pos: Vector2i, target: Node2D, enemy_type: Enemy.EnemyType):
 	var enemy = preload("res://Entities/witch_enemy.tscn").instantiate()
 	enemy.position = tilemap.to_global(tilemap.map_to_local(tile_pos))
 	enemy.set_astar_data(astar, tilemap)
 	enemy.original_target = target
 	entity_container.add_child(enemy)
 	enemy.scale = Vector2i(2,2)
-
+	enemy.enemy_type = enemy_type
 
 func _place_tile():
 	play_sound_with_variation(%PlaceTileSFX)
@@ -435,14 +434,18 @@ func _on_start_pause_button_pressed():
 	current_time_of_day = TimeOfDay.DAY
 	is_in_wave = true
 	%ToolTip2.visible = false
+
+	enemy_spawner.start_spawn_wave(wave)
+
 	if wave <= 10:
 		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
 	else:
 		spawn_speed = $EnemySpawner.spawn_speed[9]/wave
 	
 	$EnemySpawner/EnemySpawnTimer.start(spawn_speed)
-	if wave_timer.is_stopped():
-		wave_timer.start()
+
+	wave_bar.max_value = enemy_spawner.get_wave_length()
+	wave_bar.value = enemy_spawner.get_remaining_wave_time()
 	
 func _on_mana_regen_timeout():
 	if mana < MAX_MANA:

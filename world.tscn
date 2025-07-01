@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=4 uid="uid://bcisigfbv31l8"]
+[gd_scene load_steps=50 format=4 uid="uid://bcisigfbv31l8"]
 
 [ext_resource type="Script" uid="uid://buym3f5bmapik" path="res://world.gd" id="1_u1h3i"]
 [ext_resource type="Texture2D" uid="uid://csro60cyi4k4r" path="res://Assets/BG/TestBG-Isometric.png" id="2_y7mdh"]
@@ -217,11 +217,146 @@ sources/6 = SubResource("TileSetAtlasSource_23my6")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_colq1"]
 texture = ExtResource("6_5jtsq")
 
-[node name="World" type="Node2D"]
+[sub_resource type="Animation" id="Animation_yx0jh"]
+resource_name = "wave_1"
+length = 30.0
+step = 1.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 25, 26, 27, 30),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_1ew0l"]
+resource_name = "wave_2"
+length = 30.0
+step = 1.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 25, 26, 27, 30),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [2, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}, {
+"args": [1, 0],
+"method": &"spawn_enemy_random_point"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ew0l"]
+_data = {
+&"wave_1": SubResource("Animation_yx0jh"),
+&"wave_2": SubResource("Animation_1ew0l")
+}
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("enemy_spawner")]
 script = ExtResource("1_u1h3i")
 day_time_color = Color(0, 0, 0, 0)
 night_time_color = Color(0.0352941, 0.0470588, 0.0862745, 0.8)
 sunset_time_color = Color(0.333333, 0.133333, 0.133333, 0.419608)
+enemy_spawner = NodePath("EnemySpawner")
 
 [node name="TileMaps" type="Node2D" parent="."]
 
@@ -606,7 +741,7 @@ offset_bottom = 844.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point")]
+[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point", "wave_animation_player")]
 script = ExtResource("21_bc84e")
 tower = NodePath("../EntityContainer/Tower")
 world = NodePath("..")
@@ -614,6 +749,7 @@ enemy_spawn_timer = NodePath("EnemySpawnTimer")
 tilemap = NodePath("../TileMaps/Layer0")
 top_left_point = NodePath("TopLeftMostSpawnPoint")
 bottom_right_point = NodePath("BottomRightMostSpawnPoint2")
+wave_animation_player = NodePath("AnimationPlayer")
 
 [node name="EnemySpawnTimer" type="Timer" parent="EnemySpawner"]
 wait_time = 0.2
@@ -624,13 +760,14 @@ position = Vector2(29, -10)
 [node name="BottomRightMostSpawnPoint2" type="Marker2D" parent="EnemySpawner"]
 position = Vector2(942, 806)
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EnemySpawner"]
+libraries = {
+&"": SubResource("AnimationLibrary_1ew0l")
+}
+
 [node name="ManaRegen" type="Timer" parent="."]
 wait_time = 0.5
 autostart = true
-
-[node name="WaveTimer" type="Timer" parent="."]
-wait_time = 30.0
-one_shot = true
 
 [node name="SFX" type="Node" parent="."]
 
@@ -689,4 +826,3 @@ stream = ExtResource("35_my276")
 [connection signal="holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_holding"]
 [connection signal="stop_holding" from="UI/UI/GridContainer/Panel10/PumpkinSeedBag" to="." method="_on_pumpkin_seed_bag_stop_holding"]
 [connection signal="timeout" from="ManaRegen" to="." method="_on_mana_regen_timeout"]
-[connection signal="timeout" from="WaveTimer" to="." method="_on_wave_timer_timeout"]
