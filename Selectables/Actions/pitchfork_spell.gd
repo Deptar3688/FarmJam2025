@@ -1,6 +1,6 @@
 extends Area2D
 
-var damage := 10
+var damage := 6
 var has_landed : bool
 @export var end_position : Vector2i
 @onready var sprite := $Sprite2D

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bmateh0dqyoxv" path="res://Assets/Projectiles/PitchforkSpell.png" id="1_ni6xv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g885n"]
-radius = 4.5
+radius = 8.5
 
 [node name="PitchforkSpell" type="Area2D"]
 y_sort_enabled = true

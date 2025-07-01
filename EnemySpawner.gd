@@ -26,19 +26,19 @@ func start_spawn_wave(wave: int):
 		2:
 			wave_animation_player.play("wave_2")
 		3:
-			pass
+			wave_animation_player.play("wave_3")
 		4:
 			pass
 		5:
-			pass
+			wave_animation_player.play("wave_5")
 		6:
 			pass
 		7:
-			pass
+			wave_animation_player.play("wave_7")
 		8:
 			pass
 		9:
-			pass
+			wave_animation_player.play("wave_9")
 		10:
 			pass
 		_:

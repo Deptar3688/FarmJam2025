@@ -3,7 +3,7 @@ extends Node2D
 
 static var instance: World
 
-var gold : int = 1000:
+var gold : int = 100000:
 	set(value):
 		gold = value
 		%GoldLabel.text = str(value)
@@ -21,7 +21,7 @@ var mana : int = MAX_MANA:
 		%ManaLabel.text = str(mana)
 
 var is_in_wave := false
-var wave : int = 1:
+var wave : int = 9:
 	set(value):
 		wave = value
 		%WaveLabel.text = "Wave: " + str(value)
