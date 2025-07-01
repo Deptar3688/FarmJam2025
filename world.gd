@@ -119,6 +119,8 @@ func _ready():
 	fade_in_music(current_track)
 
 func _process(delta):
+	if Input.is_key_pressed(KEY_ESCAPE):
+		_on_tower_game_over()
 	## FOR SOME REASON SELECTABLES STAY HOVERED IF YOU MOVE A CURSOR OVER THEM AT A CERTAIN SPEED
 	if get_global_mouse_position().x < $UI/UI.global_position.x:
 		for panel in $UI/UI/GridContainer.get_children():
@@ -144,6 +146,7 @@ func _process(delta):
 			current_time_of_day = TimeOfDay.NIGHT
 			for entity in CropContainer.get_children():
 				if entity is Crop:
+					play_sound_with_variation($%CoinSFX)
 					entity.harvest()
 				elif entity is TilledLand:
 					_reset_tile(tilemap.local_to_map(entity.position / 2))
@@ -418,22 +421,23 @@ func _on_cancel_selection_button_pressed():
 			panel.get_child(0).deselect()
 
 func _on_start_pause_button_pressed():
-	if holding:
-		_stop_holding()
-		$UI/UI/GridContainer._on_stop_holding()
-		for panel in $UI/UI/GridContainer.get_children():
-			panel.get_child(0).deselect()
-	var next_track = [%BGMDay1, %BGMDay2].pick_random()
-	_switch_tracks(current_track, next_track)
-	
-	current_time_of_day = TimeOfDay.DAY
-	is_in_wave = true
-	%ToolTip2.visible = false
+	if current_time_of_day == TimeOfDay.NIGHT:
+		if holding:
+			_stop_holding()
+			$UI/UI/GridContainer._on_stop_holding()
+			for panel in $UI/UI/GridContainer.get_children():
+				panel.get_child(0).deselect()
+		var next_track = [%BGMDay1, %BGMDay2].pick_random()
+		_switch_tracks(current_track, next_track)
+		
+		current_time_of_day = TimeOfDay.DAY
+		is_in_wave = true
+		%ToolTip2.visible = false
 
-	enemy_spawner.start_spawn_wave(wave)
+		enemy_spawner.start_spawn_wave(wave)
 
-	wave_bar.max_value = enemy_spawner.get_wave_length()
-	wave_bar.value = enemy_spawner.get_remaining_wave_time()
+		wave_bar.max_value = enemy_spawner.get_wave_length()
+		wave_bar.value = enemy_spawner.get_remaining_wave_time()
 	
 func _on_mana_regen_timeout():
 	if mana < MAX_MANA:

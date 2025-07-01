@@ -13,10 +13,10 @@ func _on_shoot_timer_timeout():
 		if closest_enemy != null and position.distance_to(closest_enemy.position) < 100:
 			var thorn_projectile: Projectile = thorn_projectile_tscn.instantiate()
 			thorn_projectile.position = position
-			var angle_offset = randf_range(-PI / 6, PI / 6)
+			var angle_offset = randf_range(-PI / 12, PI / 12)
 			var angle_to = position.angle_to_point(closest_enemy.position)
 			thorn_projectile.direction = Vector2.from_angle(angle_offset + angle_to)
-			thorn_projectile.speed *= randf_range(0.6, 1.4)
+			thorn_projectile.speed *= randf_range(0.8, 1.4)
 			add_sibling(thorn_projectile)
 
 var is_flower := true

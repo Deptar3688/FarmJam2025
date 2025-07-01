@@ -29,6 +29,7 @@ func _process(delta):
 			# Right now, do nothing if they don't have enough money
 			if temp_obj is Crop:
 				if temp_obj.gold_cost > World.instance.gold:
+					_play_sfx_invalid()
 					print("Not enough money. You have %s, and need %s" % [World.instance.gold, temp_obj.gold_cost])
 				else:
 					selected = true
@@ -79,3 +80,15 @@ func deselect():
 
 func _get_object():
 	return holding_icon
+
+func _play_sfx_invalid():
+	var invalid_sfx = AudioStreamPlayer.new()
+	invalid_sfx.stream = preload("res://Audio/SFX/impact-sound-effect-8-bit-retro-151796.mp3")  
+	invalid_sfx.volume_db = 0.0
+	add_child(invalid_sfx)
+	play_sound_with_variation(invalid_sfx)
+func play_sound_with_variation(player: AudioStreamPlayer, min_pitch := 0.8, max_pitch := 1.2):
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	player.pitch_scale = rng.randf_range(min_pitch, max_pitch)
+	player.play()
