@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7s0xgmxmi4cp"]
+
+[ext_resource type="Script" uid="uid://jp0dmitrkbrs" path="res://Entities/Projectiles/Projectile.gd" id="1_bq2du"]
+[ext_resource type="Texture2D" uid="uid://bhnd0731ld7a5" path="res://Assets/Projectiles/fireball.png" id="2_bq2du"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ybc0d"]
+radius = 9.0
+
+[node name="FireProjectile" type="Area2D" node_paths=PackedStringArray("sprite", "lifetime_timer")]
+z_index = 5
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_bq2du")
+rotation_speed = 9.424
+speed = 200.0
+damage = 2
+slows_down = true
+sprite = NodePath("Sprite2D")
+lifetime_timer = NodePath("LifetimeTimer")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_bq2du")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ybc0d")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true

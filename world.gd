@@ -150,8 +150,9 @@ func _process(delta):
 				for entity in CropContainer.get_children():
 					# Remove the tilled land at the scythe position
 					if entity is TilledLand and tilemap.local_to_map(entity.position) == tilemap.local_to_map(holding.position):
+						_reset_tile(tilemap.local_to_map(entity.position))
 						entity.queue_free()
-					_harvest_crop(holding.position)
+				_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			if holding is Crop:
 				if holding.gold_cost <= gold:

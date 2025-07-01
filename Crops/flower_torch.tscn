@@ -3,9 +3,10 @@
 [ext_resource type="Script" uid="uid://cm30g4tbhfpj7" path="res://Crops/flower_torch.gd" id="1_1gee4"]
 [ext_resource type="Texture2D" uid="uid://284rfwfqduo5" path="res://Assets/BG/flowers.png" id="2_xnqbt"]
 
-[node name="FlowerTorch" type="Area2D" node_paths=PackedStringArray("sprite", "growing_timer")]
+[node name="FlowerTorch" type="Area2D" node_paths=PackedStringArray("shoot_timer", "sprite", "growing_timer")]
 scale = Vector2(2, 2)
 script = ExtResource("1_1gee4")
+shoot_timer = NodePath("ShootTimer")
 crop_name = "torch_lily"
 num_stages = 3
 sprite = NodePath("Sprite2D")
@@ -26,5 +27,9 @@ one_shot = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(16, 0, 0, -8, -16, 0, 0, 8)
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
 
 [connection signal="timeout" from="GrowingTimer" to="." method="_on_growing_timer_timeout"]

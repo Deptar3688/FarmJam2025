@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgi2amhyvws2h"]
+
+[ext_resource type="Script" uid="uid://jp0dmitrkbrs" path="res://Entities/Projectiles/Projectile.gd" id="1_rauun"]
+[ext_resource type="Texture2D" uid="uid://bv3pm36cewvwk" path="res://Assets/Projectiles/rose_thorn.png" id="2_rauun"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ybc0d"]
+radius = 8.06226
+
+[node name="ThornProjectile" type="Area2D" node_paths=PackedStringArray("sprite", "lifetime_timer")]
+z_index = 5
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_rauun")
+rotation_speed = 0.0
+speed = 300.0
+damage = 2
+pierce = 999
+sprite_faces_direction = true
+sprite = NodePath("Sprite2D")
+lifetime_timer = NodePath("LifetimeTimer")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_rauun")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ybc0d")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
