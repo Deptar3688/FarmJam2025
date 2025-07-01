@@ -119,7 +119,8 @@ func take_damage(damage: int):
 	if _hp <= 0:
 		_play_sfx_death()
 		visible = false
-		await get_tree().create_timer(0.8).timeout
+		set_collision_layer_value(2, false)
+		await get_tree().create_timer(0.7).timeout
 		queue_free()
 
 	
