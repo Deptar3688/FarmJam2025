@@ -73,3 +73,6 @@ func get_random_spawn_point() -> Vector2:
 			return Vector2(bottom_right_point.position.x, randf_range(top_left_point.position.y, bottom_right_point.position.y)) / 2
 		_:
 			return Vector2.ZERO
+
+func freeplay_spawn(wave: int):
+	pass
