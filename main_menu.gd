@@ -23,6 +23,7 @@ func _ready():
 	await get_tree().create_timer(1).timeout
 	
 func _on_play_button_pressed():
+	$SelectSFX.play()
 	tween_to_position(witches, witches_original_position)
 	await get_tree().create_timer(0.8).timeout
 	var tween = create_tween()

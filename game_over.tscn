@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://crf7ikdowkr3q"]
+[gd_scene load_steps=5 format=3 uid="uid://crf7ikdowkr3q"]
 
 [ext_resource type="Script" uid="uid://xu8gste36sv" path="res://game_over.gd" id="1_yxx3c"]
 [ext_resource type="Texture2D" uid="uid://dltfrr1lkprdq" path="res://Assets/TitleScreen/GameOver.png" id="2_ccer4"]
+[ext_resource type="AudioStream" uid="uid://c6r3f1ssbmie8" path="res://Audio/SFX/coin-collect-retro-8-bit-sound-effect-145251.mp3" id="3_ccer4"]
+[ext_resource type="AudioStream" uid="uid://b2hdxq2kyjhmo" path="res://Audio/BGM/Night1.mp3" id="4_8u835"]
 
 [node name="GameOver" type="Control"]
 layout_mode = 3
@@ -20,6 +22,7 @@ scale = Vector2(6, 6)
 texture = ExtResource("2_ccer4")
 
 [node name="boxBG" type="ColorRect" parent="."]
+layout_mode = 0
 offset_left = 313.0
 offset_top = 140.0
 offset_right = 1031.0
@@ -78,11 +81,18 @@ theme_override_font_sizes/font_size = 50
 text = "Back to Main Menu"
 
 [node name="BlackFade" type="ColorRect" parent="."]
+layout_mode = 0
 offset_left = -32.0
 offset_top = -26.0
 offset_right = 1376.0
 offset_bottom = 844.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="SelectSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ccer4")
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_8u835")
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
