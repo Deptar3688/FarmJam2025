@@ -11,16 +11,16 @@ extends Node2D
 
 @export var wave_animation_player: AnimationPlayer
 
+var is_freeplay_enabled: bool = false
 @export var freeplay_spawn_timer: Timer
 @export var freeplay_total_wave_length_timer: Timer
 
-var spawn_speed: Array[int] = [2, 1.7, 1.5, 1.2, 1, 0.7, 0.5, 0.4, 0.3, 0.2]
-
-# func _ready() -> void:
-	# enemy_spawn_timer.timeout.connect(_on_enemy_spawn_timer_timeout)
+func _ready() -> void:
+	freeplay_spawn_timer.timeout.connect(freeplay_spawn)
+	freeplay_total_wave_length_timer.timeout.connect(func(): freeplay_spawn_timer.stop())
 
 func start_spawn_wave(wave: int):
-	match(wave):
+	match (wave):
 		1:
 			wave_animation_player.play("wave_1")
 		2:
@@ -42,17 +42,25 @@ func start_spawn_wave(wave: int):
 		10:
 			pass
 		_:
+			is_freeplay_enabled = true
 			freeplay_total_wave_length_timer.wait_time = 30 + wave * 2
-			
+			freeplay_total_wave_length_timer.start()
+			freeplay_spawn_timer.start()
 
 ## Returns the time left, in seconds
 func get_remaining_wave_time():
+	if is_freeplay_enabled:
+		return freeplay_total_wave_length_timer.time_left
 	return wave_animation_player.current_animation_length - wave_animation_player.current_animation_position
 
 func get_wave_length():
+	if is_freeplay_enabled:
+		return freeplay_total_wave_length_timer.wait_time
 	return wave_animation_player.current_animation_length
 
 func is_wave_active():
+	if is_freeplay_enabled:
+		return !freeplay_total_wave_length_timer.is_stopped()
 	return wave_animation_player.is_playing()
 
 func spawn_enemy_random_point(amount: int, enemy_type: Enemy.EnemyType = Enemy.EnemyType.NORMAL):
@@ -74,5 +82,20 @@ func get_random_spawn_point() -> Vector2:
 		_:
 			return Vector2.ZERO
 
-func freeplay_spawn(wave: int):
-	pass
+func freeplay_spawn():
+	var wave = World.instance.wave
+	var variant_chance = clampf(0.2 + wave * 0.02, 0.2, 0.7)
+	if randf() < variant_chance:
+		var amount: int = randi_range(1, 1 + wave / 15)
+		match randi_range(0, 2):
+			0: # Tanky version
+				spawn_enemy_random_point(amount, Enemy.EnemyType.TANKY)
+			1: # Fast version
+				spawn_enemy_random_point(amount, Enemy.EnemyType.SPEEDY)
+			2: # Ranged version
+				spawn_enemy_random_point(amount, Enemy.EnemyType.RANGED)
+			_:
+				pass
+	else:
+		var amount: int = randi_range(1, 1 + wave / 16)
+		spawn_enemy_random_point(amount)

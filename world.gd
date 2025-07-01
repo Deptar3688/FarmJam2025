@@ -25,7 +25,6 @@ var wave : int = 1:
 	set(value):
 		wave = value
 		%WaveLabel.text = "Wave: " + str(value)
-var spawn_speed
 
 @onready var night_filter := %NightFilter
 var _daylight_filter_tween: Tween
@@ -436,13 +435,6 @@ func _on_start_pause_button_pressed():
 	%ToolTip2.visible = false
 
 	enemy_spawner.start_spawn_wave(wave)
-
-	if wave <= 10:
-		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
-	else:
-		spawn_speed = $EnemySpawner.spawn_speed[9]/wave
-	
-	$EnemySpawner/EnemySpawnTimer.start(spawn_speed)
 
 	wave_bar.max_value = enemy_spawner.get_wave_length()
 	wave_bar.value = enemy_spawner.get_remaining_wave_time()

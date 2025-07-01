@@ -741,7 +741,7 @@ offset_bottom = 844.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point", "freeplay_spawn_timer", "freeplay_total_wave_length_timer", "wave_animation_player")]
+[node name="EnemySpawner" type="Node2D" parent="." node_paths=PackedStringArray("tower", "world", "enemy_spawn_timer", "tilemap", "top_left_point", "bottom_right_point", "wave_animation_player", "freeplay_spawn_timer", "freeplay_total_wave_length_timer")]
 script = ExtResource("21_bc84e")
 tower = NodePath("../EntityContainer/Tower")
 world = NodePath("..")
@@ -749,9 +749,9 @@ enemy_spawn_timer = NodePath("FreeplayNodes/EnemySpawnTimer")
 tilemap = NodePath("../TileMaps/Layer0")
 top_left_point = NodePath("TopLeftMostSpawnPoint")
 bottom_right_point = NodePath("BottomRightMostSpawnPoint2")
+wave_animation_player = NodePath("AnimationPlayer")
 freeplay_spawn_timer = NodePath("FreeplayNodes/EnemySpawnTimer")
 freeplay_total_wave_length_timer = NodePath("FreeplayNodes/WaveLengthTimer")
-wave_animation_player = NodePath("AnimationPlayer")
 
 [node name="TopLeftMostSpawnPoint" type="Marker2D" parent="EnemySpawner"]
 position = Vector2(29, -10)
@@ -771,6 +771,7 @@ wait_time = 2.0
 
 [node name="WaveLengthTimer" type="Timer" parent="EnemySpawner/FreeplayNodes"]
 wait_time = 30.0
+one_shot = true
 
 [node name="ManaRegen" type="Timer" parent="."]
 wait_time = 0.5
