@@ -438,7 +438,7 @@ func _on_start_pause_button_pressed():
 	if wave <= 10:
 		spawn_speed = $EnemySpawner.spawn_speed[wave-1]
 	else:
-		spawn_speed = $EnemySpawner.spawn_speed[9]/wave * 2
+		spawn_speed = $EnemySpawner.spawn_speed[9]/wave
 	
 	$EnemySpawner/EnemySpawnTimer.start(spawn_speed)
 	if wave_timer.is_stopped():

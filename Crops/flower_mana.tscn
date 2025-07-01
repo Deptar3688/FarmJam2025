@@ -11,9 +11,9 @@ crop_name = "mana_flower"
 num_stages = 3
 sprite = NodePath("Sprite2D")
 growing_timer = NodePath("GrowingTimer")
-health = Array[int]([1, 2, 3])
+health = Array[int]([1, 2, 2])
 gold_cost = 50
-gold_value = 100
+gold_value = 60
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)

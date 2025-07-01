@@ -12,8 +12,8 @@ num_stages = 4
 sprite = NodePath("Sprite2D")
 growing_timer = NodePath("GrowingTimer")
 health = Array[int]([2, 4, 4, 6])
-gold_cost = 200
-gold_value = 400
+gold_cost = 150
+gold_value = 175
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -8)

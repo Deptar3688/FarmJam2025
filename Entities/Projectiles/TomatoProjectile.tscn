@@ -13,6 +13,7 @@ collision_mask = 2
 script = ExtResource("1_rrbni")
 rotation_speed = 9.424
 speed = 250.0
+damage = 2
 sprite = NodePath("Sprite2D")
 lifetime_timer = NodePath("LifetimeTimer")
 
