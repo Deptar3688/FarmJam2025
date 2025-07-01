@@ -74,61 +74,48 @@ func generate_path_to_target(target_local):
 		generate_path_to_target(original_target)
 		
 func _physics_process(delta):
-	if target != original_target and !is_instance_valid(target):
+	if is_attacking and target != original_target and !is_instance_valid(target):
 		current_speed = speed
 		is_attacking = false
 		attack_cooldown.stop()
 		target = original_target
 		path = generate_path_to_target(target)
 
-	if path_index < path.size():
-		var tile = path[path_index]
-		var target_pos = tilemap.to_global(tilemap.map_to_local(tile))
-		direction = (target_pos - global_position)
-		
-		# update sprite
-		if direction.x < 0 and direction.y < 0:
-			sprite.frame = 0
-		elif direction.x > 0 and direction.y < 0:
-			sprite.frame = 1
-		elif direction.x > 0 and direction.y > 0:
-			sprite.frame = 2
-		elif direction.x < 0 and direction.y > 0:
-			sprite.frame = 3
-		
-		if direction.length() < 2:
-			path_index += 1
-		else:
-			position += direction.normalized() * current_speed
-		
-	if is_attacking:
-		current_speed = 0
-		if !is_instance_valid(target):
-			is_attacking = false
-			attack_cooldown.stop()
-			target = original_target
-			path = generate_path_to_target(original_target)
-			current_speed = speed
+	if !is_attacking:
+		if path_index < path.size():
+			var tile = path[path_index]
+			var target_pos = tilemap.to_global(tilemap.map_to_local(tile))
+			direction = (target_pos - global_position)
+			
+			# update sprite
+			if direction.x < 0 and direction.y < 0:
+				sprite.frame = 0
+			elif direction.x > 0 and direction.y < 0:
+				sprite.frame = 1
+			elif direction.x > 0 and direction.y > 0:
+				sprite.frame = 2
+			elif direction.x < 0 and direction.y > 0:
+				sprite.frame = 3
+			
+			if direction.length() < 2:
+				path_index += 1
+			else:
+				position += direction.normalized() * current_speed
 
 func _on_aggro_range_area_entered(area):
-	if area is Crop: 
-		if area.current_state != 0: # if placed
-			var new_path = generate_path_to_target(area)
-			if generate_path_to_target(target).size() > new_path.size():
-				target = area
-				path = new_path
-				path_index = 1
-			
-	else:
-		#print(area.name)
-		pass
+	if area is Crop and area.current_state != 0:
+		if !is_instance_valid(target):
+			target = original_target
+		if global_position.distance_to(area.global_position) < global_position.distance_to(target.global_position):
+			path = generate_path_to_target(area)
+			target = area
+			path_index = 1
 
 func _on_attack_range_area_entered(area):
-	if area is Crop:
-		if area.current_state != 0:
-			is_attacking = true
-			attack_cooldown.start()
-	else:
+	if area is Crop and area.current_state != 0:
+		is_attacking = true
+		attack_cooldown.start()
+	elif area is Tower:
 		is_attacking = true
 		attack_cooldown.start()
 

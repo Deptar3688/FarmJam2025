@@ -166,11 +166,6 @@ func _process(delta):
 			if !is_in_wave:
 				%InvalidSFX.play()
 			else:
-				for entity in CropContainer.get_children():
-					# Remove the tilled land at the scythe position
-					if entity is TilledLand and tilemap.local_to_map(entity.position) == tilemap.local_to_map(holding.position):
-						_reset_tile(tilemap.local_to_map(entity.position))
-						entity.queue_free()
 				_harvest_crop(holding.position)
 		elif Input.is_action_just_pressed("click") and is_tile_placeable(holding.position):
 			if holding is Crop:
@@ -216,6 +211,11 @@ func _harvest_crop(target_position:Vector2):
 			if crop.position == target_position and mana >= 5:
 				play_sound_with_variation(%CoinSFX)
 				crop.harvest()
+				for entity in CropContainer.get_children():
+					# Remove the tilled land at the scythe position
+					if entity is TilledLand and tilemap.local_to_map(entity.position) == tilemap.local_to_map(holding.position):
+						_reset_tile(tilemap.local_to_map(entity.position))
+						entity.queue_free()
 			else:
 				%InvalidSFX.play()
 
@@ -273,21 +273,21 @@ func _place_tile():
 	var local_pos = placement_mask_current.to_local(mouse_pos)
 	var tile_coords = placement_mask_current.local_to_map(local_pos)
 
-	new_crop.position = tile_pos
-	CropContainer.add_child(new_crop)
-	if new_crop is Crop:
+	if held_tile == tilled_land_scene and mana >= 5:
+		mana -= 5
+		placement_mask_till.set_cell(tile_coords, 1, Vector2i(0,1))
+		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
+		new_crop.position = tile_pos
+		CropContainer.add_child(new_crop)
+	elif new_crop is Crop:
+		new_crop.position = tile_pos
+		CropContainer.add_child(new_crop)
 		# Make the tile plantable again if the crop has died from enemies
 		new_crop.has_died.connect(_reenable_tile.bind(tile_coords), CONNECT_ONE_SHOT)
 		# Reset the tile the crop is on if its being harvested
 		new_crop.has_been_harvested.connect(_reset_tile.bind(tile_coords), CONNECT_ONE_SHOT)
-	
-	if held_tile != tilled_land_scene:
 		new_crop._start_growing()
 		placement_mask_crops.set_cell(tile_coords, 1, Vector2i(0,1))
-	elif held_tile == tilled_land_scene and mana >= 5:
-		mana -= 5
-		placement_mask_till.set_cell(tile_coords, 1, Vector2i(0,1))
-		placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
 
 func _reenable_tile(tile_coords: Vector2i):
 	placement_mask_crops.set_cell(tile_coords, 0, Vector2i(0,1))
@@ -313,9 +313,6 @@ func _mouse_to_tileset_position():
 	var world_pos = tilemap.to_global(tilemap.map_to_local(tile_coords))  # snap to tile center
 	return world_pos
 
-#func _update_placement_mask():
-
-
 func _hold_object(object):
 	held_tile = object
 	holding = object.instantiate()
@@ -331,7 +328,6 @@ func _hold_object(object):
 		placement_mask_current = placement_mask_till
 		placement_mask_current.visible = true
 		
-	
 func _stop_holding():
 	held_tile = null
 	holding.queue_free()
