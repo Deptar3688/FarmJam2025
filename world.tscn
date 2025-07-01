@@ -219,6 +219,9 @@ texture = ExtResource("6_5jtsq")
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_u1h3i")
+day_time_color = Color(0, 0, 0, 0)
+night_time_color = Color(0.0352941, 0.0470588, 0.0862745, 0.8)
+sunset_time_color = Color(0.333333, 0.133333, 0.133333, 0.419608)
 
 [node name="TileMaps" type="Node2D" parent="."]
 

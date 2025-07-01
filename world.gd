@@ -28,18 +28,37 @@ var wave : int = 1:
 var spawn_speed
 
 @onready var night_filter := %NightFilter
+var _daylight_filter_tween: Tween
+
+@export var day_time_color: Color
+@export var night_time_color: Color
+@export var sunset_time_color: Color 
+
 # var _night_filter_tween: Tween
-var is_night: bool = true:
+var current_time_of_day: TimeOfDay = TimeOfDay.NIGHT:
 	set(value):
-		if value != is_night:
-			if value == true:
-				night_filter.visible = true
-				create_tween().tween_property(night_filter, "color:a", 0.8, 0.5)\
+		if value != current_time_of_day:
+			current_time_of_day = value
+			if _daylight_filter_tween != null and _daylight_filter_tween.is_running():
+				_daylight_filter_tween.kill()
+			match(value):
+				TimeOfDay.DAY:
+					_daylight_filter_tween = create_tween()
+					_daylight_filter_tween.tween_property(night_filter, "color", day_time_color, 0.5)\
 				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-			else:
-				create_tween().tween_property(night_filter, "color:a", 0.0, 0.5)\
+				TimeOfDay.SUNSET:
+					_daylight_filter_tween = create_tween()
+					_daylight_filter_tween.tween_property(night_filter, "color", sunset_time_color, 0.5)\
 				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-			is_night = value
+				TimeOfDay.NIGHT:
+					_daylight_filter_tween = create_tween()
+					_daylight_filter_tween.tween_property(night_filter, "color", night_time_color, 0.5)\
+				.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+				_:
+					pass
+		
+enum TimeOfDay{DAY, SUNSET, NIGHT}
+
 @onready var wave_timer := $WaveTimer 
 @onready var wave_bar := %WaveBar
 
@@ -116,13 +135,15 @@ func _process(delta):
 		%TT2Label.text = _set_label()
 	else:
 		wave_bar.value = wave_timer.time_left
+		if wave_bar.value == 0:
+			current_time_of_day = TimeOfDay.SUNSET
 		if $EnemySpawner/EnemySpawnTimer.is_stopped() and get_tree().get_node_count_in_group("Enemy") <= 0:
 			var next_track = [%BGMNight1, %BGMNight2].pick_random()
 			_switch_tracks(current_track, next_track)
 			wave += 1
 			is_in_wave = false
 			%ToolTip2.visible = false
-			is_night = true
+			current_time_of_day = TimeOfDay.NIGHT
 			for entity in CropContainer.get_children():
 				if entity is Crop:
 					entity.harvest()
@@ -411,7 +432,7 @@ func _on_start_pause_button_pressed():
 	var next_track = [%BGMDay1, %BGMDay2].pick_random()
 	_switch_tracks(current_track, next_track)
 	
-	is_night = false
+	current_time_of_day = TimeOfDay.DAY
 	is_in_wave = true
 	%ToolTip2.visible = false
 	if wave <= 10:
