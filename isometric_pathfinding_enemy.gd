@@ -37,18 +37,18 @@ var enemy_type: EnemyType = EnemyType.NORMAL:
 				sprite.texture = tanky_variant_sprite
 			EnemyType.SPEEDY:
 				_hp = 20
-				speed = 2.0
+				speed = 3.0
 				current_speed = speed
 				sprite.texture = speedy_variant_sprite
 				attack_speed_timer.wait_time = 0.3
 			EnemyType.RANGED:
 				aggro_range_shape.shape = aggro_range_shape.shape.duplicate()
 				aggro_range_shape.shape.radius *= 2
-				attack_range_shape.shape.radius *= 2
+				attack_range_shape.shape.radius *= 3
 				sprite.texture = ranged_variant_sprite
-				attack_speed_timer.wait_time = 0.8
-				_hp = 20
-				speed = 0.5
+				attack_speed_timer.wait_time = 0.5
+				_hp = 30
+				speed = 0.6
 
 enum EnemyType {NORMAL, TANKY, SPEEDY, RANGED}
 

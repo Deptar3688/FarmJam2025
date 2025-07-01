@@ -24,7 +24,7 @@ Globals="*res://Globals.gd"
 window/size/viewport_width=1344
 window/size/viewport_height=816
 window/size/resizable=false
-window/stretch/mode="canvas_items"
+window/main_scene="res://world.tscn"
 
 [global_group]
 
