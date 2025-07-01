@@ -13,7 +13,7 @@ signal game_over
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	health = 100000
+	health = 100
 	current_hp = health
 	original_position = sprite.position
 

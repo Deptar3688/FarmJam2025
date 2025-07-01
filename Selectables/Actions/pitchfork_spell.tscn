@@ -4,20 +4,20 @@
 [ext_resource type="Texture2D" uid="uid://bmateh0dqyoxv" path="res://Assets/Projectiles/PitchforkSpell.png" id="1_ni6xv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g885n"]
-radius = 8.5
+radius = 16.0
 
 [node name="PitchforkSpell" type="Area2D"]
 y_sort_enabled = true
-scale = Vector2(2, 2)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_g885n")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -7)
+scale = Vector2(2, 2)
 texture = ExtResource("1_ni6xv")
 hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2(1, 0.7)
+position = Vector2(0, 3)
 shape = SubResource("CircleShape2D_g885n")
